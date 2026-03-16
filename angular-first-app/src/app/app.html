@@ -1,1 +1,45 @@
-<h2>Hola Mundo Angular!!!</h2>
+@if (visible) {
+  <div>
+    <h2>{{ title }}</h2>
+  </div>
+  <div>Total: {{counter}}</div>
+} @else {
+  <ng-container *ngTemplateOutlet="notEnabled"></ng-container>
+}
+
+<button (click)="setVisible()">{{ showOrHideBtnTitle }}</button>
+
+@if (visible) {
+  <div>
+    @if (users.length > 0) {
+      <table>
+        <thead>
+          <tr>
+            <th>id</th>
+            <th>name</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (user of users; track user; let i = $index) {
+            <tr>
+              <td>{{ i + 1 }}</td>
+              <td>{{ user }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    } @else {
+      <ng-container *ngTemplateOutlet="isEmpty"></ng-container>
+    }
+  </div>
+}
+
+<app-counter [title]="subTitle" (counterEmit)="setCounter($event)"></app-counter>
+
+<ng-template #isEmpty>
+  <div>No existen usuarios en el sistema</div>
+</ng-template>
+
+<ng-template #notEnabled>
+  <div>Lo sentimos, la página no está disponible</div>
+</ng-template>

@@ -1,0 +1,5 @@
+Angular CLI
+
+Create a new app
+	
+	ng new angular-app
