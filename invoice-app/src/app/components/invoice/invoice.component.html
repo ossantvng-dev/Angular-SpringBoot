@@ -1,0 +1,55 @@
+<div>
+  <h2>Listado de Facturas</h2>
+
+  @for (invoice of invoices; track invoice.id) {
+    <div class="invoice-card">
+      <h3>{{ invoice.name }} (ID: {{ invoice.id }})</h3>
+
+      <!-- Cliente -->
+      <div>
+        <h4>Datos del Cliente</h4>
+        <ul>
+          <li>{{ invoice.client.name }} {{ invoice.client.lastName }}</li>
+          <li>{{ invoice.client.address.country }} / {{ invoice.client.address.city }}</li>
+          <li>{{ invoice.client.address.street }} {{ invoice.client.address.number }}</li>
+        </ul>
+      </div>
+
+      <!-- Empresa -->
+      <div>
+        <h4>Datos de la Empresa</h4>
+        <ul>
+          <li>{{ invoice.company.name }}</li>
+          <li>{{ invoice.company.fiscalNumber }}</li>
+        </ul>
+      </div>
+
+      <!-- Items -->
+      <div>
+        <h4>Detalle de la factura</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>id</th>
+              <th>product</th>
+              <th>price</th>
+              <th>quantity</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of invoice.items; track $index) {
+              <tr>
+                <td>{{ item.id }}</td>
+                <td>{{ item.product }}</td>
+                <td>{{ item.price }}</td>
+                <td>{{ item.quantity }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <hr />
+    </div>
+  }
+</div>

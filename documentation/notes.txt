@@ -3,3 +3,7 @@ Angular CLI
 Create a new app
 	
 	ng new angular-app
+	
+Create new component
+
+	ng g component counter
