@@ -7,3 +7,9 @@ Create a new app
 Create new component
 
 	ng g component counter
+	
+	ng g c components/invoiceList
+	
+Create a new Service
+	
+	ng g service services/item

@@ -1,0 +1,23 @@
+<h5>Detalle de la factura</h5>
+
+<table class="table table-striped table-hover mt-2">
+  <thead class="table-dark">
+    <tr>
+      <th>ID</th>
+      <th>Producto</th>
+      <th>Precio</th>
+      <th>Cantidad</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    @for (item of items; track $index) {
+      <tr>
+        <td>{{ item.id }}</td>
+        <td>{{ item.product }}</td>
+        <td>{{ item.price }}</td>
+        <td>{{ item.quantity }}</td>
+      </tr>
+    }
+  </tbody>
+</table>

@@ -1,4 +1,4 @@
 export class Company {
-    name!: string;
-    fiscalNumber!: number;
+  name!: string;
+  fiscalNumber!: number;
 }

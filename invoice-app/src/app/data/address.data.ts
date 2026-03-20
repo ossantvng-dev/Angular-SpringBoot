@@ -1,4 +1,4 @@
-import { Address } from "../models/address";
+import { Address } from '../models/address';
 
 export const addresses: Address[] = [
   { country: 'Costa Rica', city: 'San José', street: 'Avenida Central', number: 101 },
@@ -11,7 +11,6 @@ export const addresses: Address[] = [
   { country: 'Costa Rica', city: 'Liberia', street: 'Calle 1', number: 56 },
   { country: 'Costa Rica', city: 'Nicoya', street: 'Avenida Colonial', number: 78 },
   { country: 'Costa Rica', city: 'Santa Ana', street: 'Boulevard Oeste', number: 19 },
-
   { country: 'Costa Rica', city: 'Escazú', street: 'Calle La Paz', number: 11 },
   { country: 'Costa Rica', city: 'Desamparados', street: 'Avenida Sur', number: 29 },
   { country: 'Costa Rica', city: 'Curridabat', street: 'Calle Primavera', number: 88 },
@@ -33,7 +32,6 @@ export const addresses: Address[] = [
   { country: 'Costa Rica', city: 'Naranjo', street: 'Avenida Norte', number: 25 },
   { country: 'Costa Rica', city: 'Palmares', street: 'Calle Vieja', number: 32 },
   { country: 'Costa Rica', city: 'Grecia', street: 'Avenida Libertad', number: 74 },
-
   { country: 'Costa Rica', city: 'Turrialba', street: 'Calle Volcán', number: 58 },
   { country: 'Costa Rica', city: 'Guápiles', street: 'Avenida Caribe', number: 91 },
   { country: 'Costa Rica', city: 'Sarapiquí', street: 'Calle Río', number: 49 },
@@ -55,7 +53,6 @@ export const addresses: Address[] = [
   { country: 'Costa Rica', city: 'Montes de Oca', street: 'Avenida Universitaria', number: 36 },
   { country: 'Costa Rica', city: 'Puriscal', street: 'Calle Oeste', number: 48 },
   { country: 'Costa Rica', city: 'Tarrazú', street: 'Avenida Café', number: 82 },
-
   { country: 'Costa Rica', city: 'Dota', street: 'Calle Montaña', number: 67 },
   { country: 'Costa Rica', city: 'Acosta', street: 'Avenida Sur', number: 39 },
   { country: 'Costa Rica', city: 'Aserrí', street: 'Calle Este', number: 51 },
@@ -88,4 +85,26 @@ export const addresses: Address[] = [
   { country: 'Costa Rica', city: 'Zarcero Norte', street: 'Avenida Jardín', number: 80 },
   { country: 'Costa Rica', city: 'Oreamuno', street: 'Calle Volcán', number: 98 },
   { country: 'Costa Rica', city: 'Jiménez', street: 'Avenida Este', number: 24 },
+
+  { country: 'Costa Rica', city: 'San Vito', street: 'Avenida Sur', number: 31 },
+  { country: 'Costa Rica', city: 'La Fortuna', street: 'Calle Volcán', number: 72 },
+  { country: 'Costa Rica', city: 'Bijagua', street: 'Avenida Norte', number: 58 },
+  { country: 'Costa Rica', city: 'Puerto Viejo', street: 'Calle Caribe', number: 44 },
+  { country: 'Costa Rica', city: 'Manzanillo', street: 'Calle Playa', number: 12 },
+  { country: 'Costa Rica', city: 'Cahuita', street: 'Avenida Negra', number: 63 },
+  { country: 'Costa Rica', city: 'Sámara', street: 'Calle Pacífico', number: 27 },
+  { country: 'Costa Rica', city: 'Nosara', street: 'Avenida Yoga', number: 89 },
+  { country: 'Costa Rica', city: 'Playa Hermosa', street: 'Calle Surf', number: 51 },
+  { country: 'Costa Rica', city: 'Playa Flamingo', street: 'Avenida Marina', number: 76 },
+
+  { country: 'Costa Rica', city: 'Tamarindo', street: 'Calle Central', number: 33 },
+  { country: 'Costa Rica', city: 'Playas del Coco', street: 'Avenida Océano', number: 94 },
+  { country: 'Costa Rica', city: 'Santa Cruz', street: 'Calle Folclor', number: 48 },
+  { country: 'Costa Rica', city: 'Nicoya Norte', street: 'Avenida Colonial', number: 67 },
+  { country: 'Costa Rica', city: 'Hojancha Norte', street: 'Calle Bosque', number: 83 },
+  { country: 'Costa Rica', city: 'Carrillo', street: 'Avenida Playa', number: 29 },
+  { country: 'Costa Rica', city: 'Bagaces Norte', street: 'Calle Llanos', number: 55 },
+  { country: 'Costa Rica', city: 'Cañas Dulces', street: 'Avenida Volcán', number: 71 },
+  { country: 'Costa Rica', city: 'Fortuna Norte', street: 'Calle Termal', number: 62 },
+  { country: 'Costa Rica', city: 'Río Segundo', street: 'Avenida Aeropuerto', number: 88 },
 ];

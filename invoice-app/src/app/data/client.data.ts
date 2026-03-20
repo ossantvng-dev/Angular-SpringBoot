@@ -1,5 +1,5 @@
-import { Client } from "../models/client.js";
-import { addresses } from "./address.data.js";
+import { Client } from "../models/client";
+import { addresses } from "./address.data";
 
 export const clients: Client[] = [
   { name: "Oscar", lastName: "Santamaría", address: addresses[0] },

@@ -1,0 +1,25 @@
+<div class="card mb-4 shadow-sm">
+  <!-- Body -->
+  <div class="card-body">
+    <!-- Cliente y Empresa -->
+    <div class="row">
+      <!-- Cliente -->
+      <div class="col-md-6 mb-3">
+        <app-client-card [client]="invoice.client"></app-client-card>
+      </div>
+
+      <!-- Empresa -->
+      <div class="col-md-6 mb-3">
+        <app-company-card [company]="invoice.company"></app-company-card>
+      </div>
+    </div>
+
+    <!-- Items -->
+    <div class="mt-4">
+      <app-invoice-items [items]="invoice.items"></app-invoice-items>
+    </div>
+
+    <!-- TOTAL -->
+    <app-invoice-total [invoice]="invoice"></app-invoice-total>
+  </div>
+</div>

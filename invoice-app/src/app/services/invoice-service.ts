@@ -14,4 +14,11 @@ export class InvoiceService {
   getInvoices(): Invoice[] {
     return this.invoices;
   }
+
+  getInvoiceTotal(invoice: Invoice): number {
+    return invoice.items.reduce((total, item) => {
+      return total + (item.price * item.quantity);
+    }, 0);
+  }
+
 }
