@@ -5,18 +5,38 @@
     <tr>
       <th>ID</th>
       <th>Producto</th>
-      <th>Precio</th>
-      <th>Cantidad</th>
+      <th class="text-end">Precio</th>
+      <th class="text-end">Cantidad</th>
+      <th class="text-end">Total línea</th>
+      <th class="text-center"></th>
     </tr>
   </thead>
 
   <tbody>
-    @for (item of items; track $index) {
+    @for (item of invoice.items; track $index; let i = $index) {
       <tr>
         <td>{{ item.id }}</td>
         <td>{{ item.product }}</td>
-        <td>{{ item.price }}</td>
-        <td>{{ item.quantity }}</td>
+
+        <td class="text-end">
+          {{ item.price | currency: 'USD' }}
+        </td>
+
+        <td class="text-end">
+          {{ item.quantity }}
+        </td>
+
+        <!-- Total por línea -->
+        <td class="text-end fw-bold">
+          {{ item.price * item.quantity | currency: 'USD' }}
+        </td>
+
+        <!-- Botón eliminar con icono -->
+        <td class="text-center">
+          <button class="btn btn-outline-danger btn-sm" (click)="remove(i)" title="Eliminar línea">
+            <i class="bi bi-trash"></i>
+          </button>
+        </td>
       </tr>
     }
   </tbody>

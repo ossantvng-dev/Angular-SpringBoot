@@ -1,12 +1,22 @@
 import { Component, Input } from '@angular/core';
-import { Item } from '../../models/item';
+import { Invoice } from '../../models/invoice';
+import { InvoiceService } from '../../services/invoice-service';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'app-invoice-items',
-  imports: [],
+  imports: [CurrencyPipe],
   templateUrl: './invoice-items.component.html',
   styleUrl: './invoice-items.component.css',
 })
 export class InvoiceItemsComponent {
-  @Input() items!: Item[];
+
+  @Input() invoice!: Invoice;
+  
+  constructor(private invoiceService: InvoiceService) {}
+  
+  remove(index: number): void {
+    this.invoiceService.removeItem(this.invoice, index);
+  }
+
 }
