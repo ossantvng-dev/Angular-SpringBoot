@@ -2,7 +2,7 @@
   <h2 class="mb-4">Listado de Facturas</h2>
 
   <div class="accordion" id="invoiceAccordion">
-    @for (invoice of invoices; track invoice.id; let i = $index) {
+    @for (invoice of paginatedInvoices; track invoice.id; let i = $index) {
       <div class="accordion-item mb-3">
         <!-- HEADER AZUL (igual al original) -->
         <h2 class="accordion-header" id="heading-{{ i }}">
@@ -34,4 +34,13 @@
       </div>
     }
   </div>
+  <app-pagination
+    [currentPage]="currentPage"
+    [totalPages]="totalPages"
+    [itemsPerPage]="itemsPerPage"
+    [itemsPerPageOptions]="[5, 10, 20, 50]"
+    (pageChange)="changePage($event)"
+    (itemsPerPageChange)="changeItemsPerPage($event)"
+  >
+  </app-pagination>
 </div>
