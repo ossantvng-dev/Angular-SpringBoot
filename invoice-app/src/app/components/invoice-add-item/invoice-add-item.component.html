@@ -1,0 +1,20 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="form" class="row g-3">
+  <div class="col-md-6">
+    <label class="form-label">Producto</label>
+    <input type="text" class="form-control" formControlName="product" />
+  </div>
+
+  <div class="col-md-3">
+    <label class="form-label">Precio</label>
+    <input type="number" class="form-control" formControlName="price" />
+  </div>
+
+  <div class="col-md-3">
+    <label class="form-label">Cantidad</label>
+    <input type="number" class="form-control" formControlName="quantity" />
+  </div>
+
+  <button class="btn btn-success" type="submit" [disabled]="form.invalid">
+    <i class="bi bi-check-circle"></i> Guardar
+  </button>
+</form>
