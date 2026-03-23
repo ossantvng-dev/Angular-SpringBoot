@@ -16,8 +16,6 @@ import { CartService } from './services/cart-service';
 export class App implements OnInit {
   products: Product[] = [];
 
-  items: CartItem[] = [];
-
   protected readonly title = signal('shopping-cart-app-ui');
 
   constructor(
@@ -29,13 +27,15 @@ export class App implements OnInit {
     this.products = this.productService.findAll();
   }
 
+  get items(): CartItem[] {
+    return this.cartService.getItems();
+  }
+
   onAddProductToCart(product: Product) {
     this.cartService.addItem(product);
-    this.items = this.cartService.getItems();
   }
 
   onRemoveItemFromCart(productId: number) {
     this.cartService.removeItem(productId);
-    this.items = this.cartService.getItems();
   }
 }
