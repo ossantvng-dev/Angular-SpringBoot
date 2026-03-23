@@ -16,6 +16,8 @@ import { CartService } from './services/cart-service';
 export class App implements OnInit {
   products: Product[] = [];
 
+  showCart: boolean = false;
+
   protected readonly title = signal('shopping-cart-app-ui');
 
   constructor(
@@ -25,6 +27,10 @@ export class App implements OnInit {
 
   ngOnInit(): void {
     this.products = this.productService.findAll();
+  }
+
+  showOrHideCart(): void {
+    this.showCart = !this.showCart;
   }
 
   get items(): CartItem[] {
