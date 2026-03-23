@@ -5,6 +5,7 @@ import { Product } from './models/product';
 import { Catalog } from './components/catalog/catalog';
 import { Cart } from './components/cart/cart';
 import { CartItem } from './models/cart-item';
+import { CartService } from './services/cart-service';
 
 @Component({
   selector: 'app-root',
@@ -19,13 +20,22 @@ export class App implements OnInit {
 
   protected readonly title = signal('shopping-cart-app-ui');
 
-  constructor(private productService: ProductService) {}
+  constructor(
+    private productService: ProductService,
+    private cartService: CartService,
+  ) {}
 
   ngOnInit(): void {
     this.products = this.productService.findAll();
   }
 
-  onAddCart(product: Product) {
-    this.items = [...this.items, { product: { ...product }, quantity: 1 }];
+  onAddProductToCart(product: Product) {
+    this.cartService.addItem(product);
+    this.items = this.cartService.getItems();
+  }
+
+  onRemoveItemFromCart(productId: number) {
+    this.cartService.removeItem(productId);
+    this.items = this.cartService.getItems();
   }
 }

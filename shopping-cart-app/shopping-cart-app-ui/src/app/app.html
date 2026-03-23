@@ -1,9 +1,15 @@
 <div class="container">
   <h2>Catálogo de productos App</h2>
-  <app-catalog [products]="products" (productEventEmitter)="onAddCart($event)"></app-catalog>
+  <app-catalog 
+    [products]="products" 
+    (add)="onAddProductToCart($event)">
+  </app-catalog>
 
   @if (items.length > 0) {
-    <app-cart [items]="items"></app-cart>
+    <app-cart 
+      [items]="items" 
+      (remove)="onRemoveItemFromCart($event)">
+    </app-cart>
   } @else {
     <div class="alert alert-warning">No hay elementos en el carro !</div>
   }

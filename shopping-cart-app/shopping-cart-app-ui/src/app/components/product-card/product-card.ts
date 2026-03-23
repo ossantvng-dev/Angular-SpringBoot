@@ -13,8 +13,7 @@ export class ProductCard {
 
   @Output() productEventEmitter: EventEmitter<Product> = new EventEmitter();
 
-  onAddCart(product: Product) {
+  onAddProductToCart(product: Product) {
     this.productEventEmitter.emit(product);
-
   }
 }
