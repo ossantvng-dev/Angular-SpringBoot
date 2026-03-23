@@ -6,10 +6,11 @@ import { Catalog } from './components/catalog/catalog';
 import { Cart } from './components/cart/cart';
 import { CartItem } from './models/cart-item';
 import { CartService } from './services/cart-service';
+import { Navbar } from './components/navbar/navbar';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Catalog, Cart],
+  imports: [RouterOutlet, Catalog, Cart, Navbar],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
@@ -32,7 +33,7 @@ export class App implements OnInit {
   showOrHideCart(): void {
     this.showCart = !this.showCart;
   }
-
+  
   get items(): CartItem[] {
     return this.cartService.getItems();
   }

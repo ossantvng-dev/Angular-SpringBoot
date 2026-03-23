@@ -1,8 +1,6 @@
-<div class="container">
+<app-navbar [items]="items" (showOrHideCartEventEmitter)="showOrHideCart()"></app-navbar>
+<div class="container my-4">
   <h2>Catálogo de productos App</h2>
-  <button class="btn btn-info btn-sm" (click)="showOrHideCart()">
-    {{ showCart ? 'Hide Cart' : 'Show Cart' }} ({{items.length}})
-  </button>
   <div class="row">
     <div [className]="showCart ? 'col-8' : 'col'">
       <app-catalog [products]="products" (add)="onAddProductToCart($event)"> </app-catalog>
