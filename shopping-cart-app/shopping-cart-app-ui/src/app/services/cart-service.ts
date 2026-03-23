@@ -22,9 +22,14 @@ export class CartService {
   }
 
   removeItem(productId: number): void {
-    this.items = this.items.filter(item => item.product.id !== productId)
+    this.items = this.items.filter((item) => item.product.id !== productId);
   }
 
-  clear(): void { this.items = []; }
-
+  calculateTotal(): number {
+    return this.items.reduce((total, item) => total + item.product.price * item.quantity, 0);
+  }
+  
+  clear(): void {
+    this.items = [];
+  }
 }
