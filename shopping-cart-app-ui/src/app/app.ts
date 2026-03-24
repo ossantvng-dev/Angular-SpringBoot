@@ -3,7 +3,6 @@ import { RouterOutlet } from '@angular/router';
 import { ProductService } from './services/product-service';
 import { Product } from './models/product';
 import { Catalog } from './components/catalog/catalog';
-import { Cart } from './components/cart/cart';
 import { CartItem } from './models/cart-item';
 import { CartService } from './services/cart-service';
 import { Navbar } from './components/navbar/navbar';
@@ -17,8 +16,6 @@ import { CartModal } from './components/cart-modal/cart-modal';
 })
 export class App implements OnInit {
   products: Product[] = [];
-
-  //showCart: boolean = false;
 
   showModal: boolean = false;
 
@@ -34,7 +31,6 @@ export class App implements OnInit {
   }
 
   showOrHideCart(): void {
-    //this.showCart = !this.showCart;
     this.showModal = !this.showModal;
   }
   

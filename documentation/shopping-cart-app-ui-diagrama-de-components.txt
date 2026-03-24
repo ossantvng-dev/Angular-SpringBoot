@@ -1,0 +1,78 @@
+============================================================
+DIAGRAMA DE COMPONENTES — SHOPPING CART APP (CON SIGNALS)
+============================================================
+
+AppComponent
+│
+├── NavbarComponent
+│     └── (emite evento) showOrHideCartEventEmitter → App abre modal
+│
+├── CatalogComponent
+│     └── ProductCardComponent
+│            └── (usa CartService.addItem)
+│
+├── CartModalComponent
+│     ├── CartComponent
+│     │      └── (emite evento remove → CartModal → CartService.removeItem)
+│     └── (usa CartService.items() con Signals)
+│
+└── CartService  (estado global del carrito)
+       ├── items = signal<CartItem[]>([])
+       ├── addItem(product)
+       ├── removeItem(productId)
+       ├── clear()
+       ├── calculateTotal()
+       └── persistencia en sessionStorage
+
+
+============================================================
+FLUJO DE DATOS (RESUMEN)
+============================================================
+
+ProductCard → CartService.addItem → Signals actualiza → CartModal reacciona
+
+CartComponent.remove → CartModal.onRemove → CartService.removeItem → Signals actualiza
+
+Navbar.click → App.openModal → CartModal se muestra y lee estado reactivo
+
+CartService.items() → cualquier componente que lo use se actualiza automáticamente
+
+
+============================================================
+DEPENDENCIAS (QUIÉN USA A QUIÉN)
+============================================================
+
+AppComponent
+   ├── usa NavbarComponent
+   ├── usa CatalogComponent
+   ├── usa CartModalComponent
+   └── usa CartService
+
+CartModalComponent
+   ├── usa CartComponent
+   └── usa CartService
+
+ProductCardComponent
+   └── usa CartService
+
+CartComponent
+   └── emite eventos hacia CartModal
+
+NavbarComponent
+   └── emite eventos hacia AppComponent
+
+CartService
+   └── no depende de ningún componente (arquitectura correcta)
+
+
+============================================================
+IDEA GENERAL
+============================================================
+
+- App es el orquestador.
+- CartService es la fuente única de verdad (estado global del carrito).
+- Signals hace que los componentes reaccionen automáticamente.
+- CartModal no necesita Inputs.
+- Catalog y ProductCard solo agregan productos.
+- CartComponent solo muestra y emite eventos.
+- Navbar solo abre el modal.
