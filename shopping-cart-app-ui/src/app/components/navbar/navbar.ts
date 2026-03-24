@@ -1,20 +1,23 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { CartItem } from '../../models/cart-item';
+import { Component, EventEmitter, Output } from '@angular/core';
+import { CartService } from '../../services/cart-service';
 
 @Component({
   selector: 'app-navbar',
-  imports: [],
+  standalone: true,
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
 })
 export class Navbar {
+  @Output() showOrHideCartEventEmitter = new EventEmitter<void>();
 
-  @Input() items: CartItem[] = [];
+  constructor(private cartService: CartService) {}
 
-  @Output() showOrHideCartEventEmitter = new EventEmitter(); 
-  
+  // contador reactivo usando Signals
+  get itemsCount(): number {
+    return this.cartService.items().length;
+  }
+
   showOrHideCart(): void {
     this.showOrHideCartEventEmitter.emit();
   }
-
 }

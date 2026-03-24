@@ -1,20 +1,14 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Product } from '../../models/product';
-import { ProductCard } from "../product-card/product-card";
+import { Component } from '@angular/core';
+import { ProductCard } from '../product-card/product-card';
+import { products } from '../../data/product.data';
 
 @Component({
   selector: 'app-catalog',
+  standalone: true,
   imports: [ProductCard],
   templateUrl: './catalog.html',
   styleUrl: './catalog.css',
 })
 export class Catalog {
-
-  @Input() products!: Product[];
-  
-  @Output() add: EventEmitter<Product> = new EventEmitter();
-  
-  onAddProductToCart(product: Product) {
-    this.add.emit(product);
-  }
+  products = products;
 }

@@ -1,8 +1,18 @@
-<app-navbar [items]="items" (showOrHideCartEventEmitter)="showOrHideCart()"></app-navbar>
+<app-navbar (showOrHideCartEventEmitter)="showOrHideCart()"></app-navbar>
+
+<div class="container my-4">
+  <router-outlet></router-outlet>
+</div>
+
+@if (showModal) {
+  <app-cart-modal (close)="showOrHideCart()"></app-cart-modal>
+}
+
+<!--<app-navbar [items]="items" (showOrHideCartEventEmitter)="showOrHideCart()"></app-navbar>
 <div class="container my-4">
   <h2>Catálogo de productos App</h2>
   <app-catalog [products]="products" (add)="onAddProductToCart($event)"></app-catalog>
 </div>
 @if (showModal) {
   <app-cart-modal (close)="showOrHideCart()"></app-cart-modal>
-}
+}-->

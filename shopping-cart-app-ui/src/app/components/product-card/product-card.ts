@@ -1,9 +1,10 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Product } from '../../models/product';
+import { CartService } from '../../services/cart-service';
 
 @Component({
   selector: 'app-product-card',
-  imports: [],
+  standalone: true,
   templateUrl: './product-card.html',
   styleUrl: './product-card.css',
 })
@@ -11,9 +12,9 @@ export class ProductCard {
 
   @Input() product!: Product;
 
-  @Output() productEventEmitter: EventEmitter<Product> = new EventEmitter();
+  constructor(private cartService: CartService) {}
 
-  onAddProductToCart(product: Product) {
-    this.productEventEmitter.emit(product);
+  onAddProductToCart() {
+    this.cartService.addItem(this.product);
   }
 }

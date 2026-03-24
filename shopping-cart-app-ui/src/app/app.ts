@@ -2,7 +2,6 @@ import { Component, OnInit, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ProductService } from './services/product-service';
 import { Product } from './models/product';
-import { Catalog } from './components/catalog/catalog';
 import { CartItem } from './models/cart-item';
 import { CartService } from './services/cart-service';
 import { Navbar } from './components/navbar/navbar';
@@ -10,7 +9,7 @@ import { CartModal } from './components/cart-modal/cart-modal';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Catalog,  Navbar, CartModal],
+  imports: [RouterOutlet, Navbar, CartModal],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
