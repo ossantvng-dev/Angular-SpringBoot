@@ -7,17 +7,20 @@ import { Cart } from './components/cart/cart';
 import { CartItem } from './models/cart-item';
 import { CartService } from './services/cart-service';
 import { Navbar } from './components/navbar/navbar';
+import { CartModal } from './components/cart-modal/cart-modal';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Catalog, Cart, Navbar],
+  imports: [RouterOutlet, Catalog,  Navbar, CartModal],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
 export class App implements OnInit {
   products: Product[] = [];
 
-  showCart: boolean = false;
+  //showCart: boolean = false;
+
+  showModal: boolean = false;
 
   protected readonly title = signal('shopping-cart-app-ui');
 
@@ -31,7 +34,8 @@ export class App implements OnInit {
   }
 
   showOrHideCart(): void {
-    this.showCart = !this.showCart;
+    //this.showCart = !this.showCart;
+    this.showModal = !this.showModal;
   }
   
   get items(): CartItem[] {
