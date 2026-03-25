@@ -1,0 +1,79 @@
+============================================================
+ARQUITECTURA V3 — SHOPPING CART APP (2026, NgRx Store + Routing)
+============================================================
+
+AppComponent
+│
+├── NavbarComponent
+│     └── (select cartItems$ desde Store → muestra contador)
+│
+├── RouterOutlet
+│     ├── CatalogComponent
+│     │      └── ProductCardComponent
+│     │             └── (dispatch addItem → Store)
+│     │
+│     └── CheckoutComponent
+│            └── (select cartItems$, cartTotal$ → dispatch clearCart)
+│
+└── CartModalComponent
+       ├── CartListComponent
+       │      └── (dispatch removeItem → Store)
+       └── (select cartItems$ desde Store)
+
+
+============================================================
+FLUJO DE DATOS V3 (NgRx)
+============================================================
+
+✔ Agregar producto al carrito
+ProductCard → store.dispatch(addItem) → Reducer actualiza → Store notifica → Navbar / Modal / Checkout reaccionan vía select
+
+✔ Eliminar producto del carrito
+CartList → store.dispatch(removeItem) → Reducer actualiza → Store notifica → Navbar / Modal / Checkout reaccionan
+
+✔ Abrir/cerrar modal
+Navbar.click → App.showModal = true/false → CartModal se muestra/oculta (igual que V2, no depende del Store)
+
+✔ Confirmar compra en Checkout
+Checkout → store.dispatch(clearCart) → Reducer vacía → Store notifica → Navbar/Modal se vacían
+
+
+============================================================
+DEPENDENCIAS V3 (QUIÉN USA A QUIÉN)
+============================================================
+
+AppComponent
+   ├── usa NavbarComponent
+   ├── usa RouterOutlet (Catalog / Checkout)
+   └── usa CartModalComponent
+
+ProductCardComponent
+   └── usa Store (dispatch addItem)
+
+CatalogComponent
+   └── usa ProductCardComponent
+
+CartModalComponent
+   └── usa Store (select cartItems)
+
+CartListComponent
+   └── usa Store (dispatch removeItem)
+
+NavbarComponent
+   └── usa Store (select cartItems → contador)
+
+CheckoutComponent
+   └── usa Store (select cartItems, cartTotal, dispatch clearCart)
+
+Store (NgRx)
+   └── Reducer + Actions + Selectors (estado global del carrito)
+
+
+============================================================
+IDEA GENERAL V3 (ARQUITECTURA ESCALABLE)
+============================================================
+
+- El Store reemplaza al CartService como fuente de verdad.
+- Los componentes despachan acciones y seleccionan estado.
+- El flujo es más predecible y trazable (Redux DevTools).
+- Escalable para login, checkout con API, persistencia avanzada.
