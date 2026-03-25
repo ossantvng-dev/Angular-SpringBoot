@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output, effect } from '@angular/core';
 import { CartService } from '../../services/cart-service';
 import { Cart } from '../cart/cart';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-cart-modal',
@@ -44,6 +45,23 @@ export class CartModal {
   }
 
   onRemove(productId: number) {
-    this.cartService.removeItem(productId);
+    Swal.fire({
+      title: '¿Eliminar producto?',
+      text: 'Este producto será eliminado del carrito',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.cartService.removeItem(productId);
+        Swal.fire({
+          icon: 'success',
+          title: 'Producto eliminado',
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+    });
   }
 }

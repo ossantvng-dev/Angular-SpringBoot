@@ -1,0 +1,83 @@
+============================================================
+ARQUITECTURA V2 — SHOPPING CART APP (2025, Signals + Routing)
+============================================================
+
+AppComponent
+│
+├── NavbarComponent
+│     └── (emite showOrHideCartEventEmitter → App abre/cierra modal)
+│
+├── RouterOutlet
+│     ├── CatalogComponent
+│     │      └── ProductCardComponent
+│     │             └── (usa CartService.addItem)
+│     │
+│     └── CheckoutComponent
+│            └── (usa CartService.items(), CartService.clear())
+│
+└── CartModalComponent
+       ├── CartListComponent
+       │      └── (usa CartService.removeItem)
+       └── (usa CartService.items() con Signals)
+
+
+============================================================
+FLUJO DE DATOS V2 (REAL Y ACTUAL)
+============================================================
+
+✔ Agregar producto al carrito
+ProductCard → CartService.addItem → Signals actualiza → Navbar / Modal / Checkout reaccionan
+
+✔ Eliminar producto del carrito
+CartList → CartService.removeItem → Signals actualiza → Navbar / Modal / Checkout reaccionan
+
+✔ Abrir/cerrar modal
+Navbar.click → App.showModal = true/false → CartModal se muestra/oculta
+
+✔ Confirmar compra en Checkout
+Checkout → CartService.clear → Signals actualiza → Navbar/Modal se vacían
+
+
+============================================================
+DEPENDENCIAS V2 (QUIÉN USA A QUIÉN)
+============================================================
+
+AppComponent
+   ├── usa NavbarComponent
+   ├── usa RouterOutlet (Catalog / Checkout)
+   └── usa CartModalComponent
+
+ProductCardComponent
+   └── usa CartService
+
+CatalogComponent
+   └── usa ProductCardComponent
+
+CartModalComponent
+   └── usa CartService
+
+CartListComponent
+   └── usa CartService
+
+NavbarComponent
+   └── emite evento hacia AppComponent
+
+CheckoutComponent
+   └── usa CartService
+
+CartService
+   └── no depende de ningún componente (estado global)
+
+
+============================================================
+IDEA GENERAL V2 (ARQUITECTURA MODERNA)
+============================================================
+
+- CartService es la única fuente de verdad del carrito.
+- Signals actualiza automáticamente todos los componentes.
+- ProductCard agrega productos directamente al carrito.
+- Catalog solo muestra productos (sin Inputs/Outputs).
+- Navbar muestra el contador leyendo el CartService.
+- CartModal muestra el carrito sin Inputs.
+- Checkout procesa la compra y limpia el carrito.
+- AppComponent solo controla el modal.
