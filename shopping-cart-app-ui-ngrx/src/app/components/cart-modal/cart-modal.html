@@ -1,0 +1,20 @@
+<div class="modal-backdrop fade show"></div>
+
+<div class="modal fade show d-block" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Carrito de compras</h5>
+        <button type="button" class="btn-close" (click)="onClose()"></button>
+      </div>
+
+      <div class="modal-body">
+        <app-cart [items]="(items$ | async) ?? []" [total]="(total$ | async) ?? 0" (remove)="onRemove($event)"></app-cart>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="onClose()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>

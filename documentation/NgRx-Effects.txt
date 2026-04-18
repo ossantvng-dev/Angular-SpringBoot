@@ -1,0 +1,25 @@
+Qué es NgRx Effects?
+
+	NgRx Effects es un módulo que permite manejar lógica asíncrona o efectos secundarios fuera de los reducers.
+
+	Los reducers deben ser puros (sin llamadas a APIs, sin acceso a storage, sin lógica externa).
+
+	Los effects escuchan las acciones que se despachan y ejecutan tareas como:
+
+		- Llamadas HTTP a un backend.
+
+		- Guardar o cargar datos desde sessionStorage o localStorage.
+
+		- Mostrar notificaciones.
+
+		- Encadenar nuevas acciones en respuesta a otras.
+
+	En tu caso, por ejemplo:
+
+		- Cuando se despacha addItem, un effect podría guardar el carrito en sessionStorage.
+
+		- Al iniciar la app, un effect podría cargar el carrito desde sessionStorage y despa4char loadCartFromSession().
+
+
+	Así mantenemos el reducer limpio y la lógica de persistencia aislada.
+	

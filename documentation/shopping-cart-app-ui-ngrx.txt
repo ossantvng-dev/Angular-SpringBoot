@@ -1,0 +1,81 @@
+Plan de trabajo para implementar Redux (NgRx)
+
+Paso 1: Configuración inicial del Store
+
+	Instalar NgRx en el proyecto (@ngrx/store, @ngrx/effects, etc.).
+
+	Modificar app.config.ts para incluir provideStore() y preparar el espacio para reducers.
+
+	Crear carpeta src/app/store/ para mantener acciones, reducers, selectores y efectos.
+
+Paso 2: Definir el estado global
+
+	Crear cart.state.ts con la interfaz CartState (items: CartItem[]).
+
+	Definir AppState que combine todos los slices (por ahora solo cart).
+
+	Esto nos da la base para escalar a otros features (ej. products, user).
+
+Paso 3: Crear acciones del carrito
+
+	addItem(product: Product)
+
+	removeItem(productId: number)
+
+	clearCart()
+
+	(Opcional) loadCartFromSession()
+
+Paso 4: Reducer del carrito
+
+	Implementar cart.reducer.ts con createReducer y on(...).
+
+	Manejar la lógica de agregar, eliminar y limpiar el carrito.
+
+	Estado inicial vacío.
+
+Paso 5: Selectores
+
+	selectCartItems
+
+	selectCartTotal
+
+	selectCartCount
+
+	Estos reemplazarán las llamadas directas a CartService.
+
+Paso 6: Conectar componentes
+
+	Navbar → usa selectCartCount.
+
+	CartModal → usa selectCartItems y selectCartTotal.
+
+	ProductCard → despacha addItem.
+
+	Cart → despacha removeItem.
+
+Paso 7: Persistencia con Effects
+	
+	Crear cart.effects.ts para escuchar cambios en el carrito y guardarlos en sessionStorage.
+
+	Al iniciar la app, cargar el carrito desde sessionStorage.
+
+Paso 8: Refactorizar servicios
+
+	CartService ya no manejará el estado directamente.
+
+	Se puede convertir en un helper para persistencia o eliminarlo si todo pasa a NgRx.
+
+Paso 9: Validación y pruebas
+
+	Probar que el flujo completo funciona:
+
+	Agregar productos desde ProductCard.
+
+	Ver el contador en Navbar.
+
+	Abrir el modal y ver los items.
+
+	Eliminar productos y limpiar carrito.
+
+	Confirmar persistencia en sessionStorage.

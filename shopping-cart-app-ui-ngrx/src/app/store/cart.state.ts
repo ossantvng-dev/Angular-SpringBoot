@@ -1,0 +1,9 @@
+import { CartItem } from "../models/cart-item"
+
+export interface CartState {
+    items: CartItem[];
+}
+
+export const initialCartState: CartState = {
+    items: []
+}

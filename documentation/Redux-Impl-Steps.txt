@@ -1,0 +1,88 @@
+Working with Redux
+	
+	Simple counter app
+	
+	Create a store folder src/app/store
+	
+	
+	1. Create Actions items.actions.ts
+	
+		import { createAction, props } from '@ngrx/store';
+
+		export const increment = createAction('[Counter Component] Increment', props<{ add: number }>());
+		export const decrement = createAction('[Counter Component] Decrement');
+		export const reset = createAction('[Counter Component] Reset');
+		
+	2. Create Reducer -> items.reducer.ts
+	
+		import { createReducer, on } from '@ngrx/store';
+		import { increment, decrement, reset } from './items.actions';
+
+		export const initialState = 0;
+
+		export const counterReducer = createReducer(
+		  initialState,
+		  on(increment, state => state + 1),
+		  on(decrement, state => state - 1),
+		  on(reset, _ => 0)
+		);
+
+	3. Register store -> app.config.ts
+	
+		
+		import { ApplicationConfig } from '@angular/core';
+		import { provideRouter } from '@angular/router';
+		import { provideStore } from '@ngrx/store';
+		import { routes } from './app.routes';
+		import { counterReducer } from './items.reducer';
+
+		export const appConfig: ApplicationConfig = {
+		  providers: [
+			provideRouter(routes),
+			provideStore({ counter: counterReducer }) // clave 'counter'
+		  ],
+		};
+
+	4. Crear selector -> items.selectors.ts
+		
+		import { createFeatureSelector } from '@ngrx/store';
+
+		export const selectCounter = createFeatureSelector<number>('counter');
+
+	5. Usage
+		
+		import { Component } from '@angular/core';
+		import { Store } from '@ngrx/store';
+		import { selectCounter } from '../store/items.selectors';
+		import { decrement, increment, reset } from '../store/items.actions';
+		import { AsyncPipe } from '@angular/common';
+
+		@Component({
+		  selector: 'app-counter',
+		  imports: [AsyncPipe],
+		  templateUrl: './counter.html',
+		  styleUrl: './counter.css',
+		})
+		export class Counter {
+		  title: string = 'Counter usando redux!';
+		  counter$;
+
+		  constructor(private store: Store) {
+			this.counter$ = this.store.select(selectCounter);
+		  }
+
+		  increment(): void {
+			this.store.dispatch(increment({ add: 3 }));
+			console.log("Incrementando...");
+		  }
+
+		  decrement(): void {
+			this.store.dispatch(decrement())
+			console.log("Decrementando...");
+		  }
+
+		  reset(): void {
+			this.store.dispatch(reset()); 
+			console.log("Reseteando contador...");
+		  }
+		}
