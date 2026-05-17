@@ -1,11 +1,18 @@
 <div class="container my-4">
-  <h3>{{ title }}</h3>
+  <h3 class="text-center">{{ title }}</h3>
+  <button class="btn btn-primary" (click)="open ? setClose() : setOpenCreate()">
+    {{ open ? 'Close' : 'Create User' }}
+  </button>
   <div class="row">
     <div class="col">
-        form
-    </div>
-    <div class="col">
-      <user-list-component [users]="users" />
+      <user-list-component
+        [users]="users"
+        (userIdEventEmitter)="removeUser($event)"
+        (selectedUserEventEmitter)="setSelectedUser($event)"
+      />
     </div>
   </div>
 </div>
+@if (open) {
+  <user-form-component [user]="selectedUser" (newUserEventEmitter)="addUser($event)" (openEventEmitter)="setClose()" />
+}

@@ -6,7 +6,7 @@ export const USERS_MOCK_LIST: User[] = [
       name: 'Carlos',
       lastName: 'Ramírez',
       email: 'carlos.ramirez@email.com',
-      username: 'carlosr',
+      username: 'cramirez',
       password: '123456',
     },
     {
@@ -14,7 +14,7 @@ export const USERS_MOCK_LIST: User[] = [
       name: 'María',
       lastName: 'González',
       email: 'maria.gonzalez@email.com',
-      username: 'mariag',
+      username: 'mariagonz',
       password: '123456',
     },
     {
@@ -22,7 +22,7 @@ export const USERS_MOCK_LIST: User[] = [
       name: 'Juan',
       lastName: 'Pérez',
       email: 'juan.perez@email.com',
-      username: 'juanp',
+      username: 'juanperz',
       password: '123456',
     },
     {
@@ -30,7 +30,7 @@ export const USERS_MOCK_LIST: User[] = [
       name: 'Ana',
       lastName: 'López',
       email: 'ana.lopez@email.com',
-      username: 'anal',
+      username: 'analopez',
       password: '123456',
     },
     {
@@ -38,7 +38,7 @@ export const USERS_MOCK_LIST: User[] = [
       name: 'Luis',
       lastName: 'Martínez',
       email: 'luis.martinez@email.com',
-      username: 'luism',
+      username: 'luismart',
       password: '123456',
     },
     {
@@ -46,7 +46,7 @@ export const USERS_MOCK_LIST: User[] = [
       name: 'Sofía',
       lastName: 'Hernández',
       email: 'sofia.hernandez@email.com',
-      username: 'sofiah',
+      username: 'sofiahern',
       password: '123456',
     },
     {
@@ -54,7 +54,7 @@ export const USERS_MOCK_LIST: User[] = [
       name: 'Diego',
       lastName: 'Castro',
       email: 'diego.castro@email.com',
-      username: 'diegoc',
+      username: 'diegocastro',
       password: '123456',
     },
     {
@@ -62,7 +62,7 @@ export const USERS_MOCK_LIST: User[] = [
       name: 'Valeria',
       lastName: 'Torres',
       email: 'valeria.torres@email.com',
-      username: 'valeriat',
+      username: 'valeriatorres',
       password: '123456',
     },
     {
@@ -70,7 +70,7 @@ export const USERS_MOCK_LIST: User[] = [
       name: 'Andrés',
       lastName: 'Vargas',
       email: 'andres.vargas@email.com',
-      username: 'andresv',
+      username: 'andresvargas',
       password: '123456',
     },
     {
@@ -78,7 +78,7 @@ export const USERS_MOCK_LIST: User[] = [
       name: 'Camila',
       lastName: 'Rojas',
       email: 'camila.rojas@email.com',
-      username: 'camilar',
+      username: 'camilarojas',
       password: '123456',
     },
   ];
