@@ -1,0 +1,206 @@
+==============================================
+ANGULAR CHECKLIST: COPIAS VS REFERENCIAS
+=============================================
+
+1. LISTAS EN TABLAS (*ngFor)
+   - Usa siempre trackBy con un identificador único (ej: user.id).
+   - Devuelve copias del array con spread operator: [...this.users].
+   - Esto asegura que Angular detecte cambios y refresque el DOM.
+
+2. OBJETOS INDIVIDUALES (ej: selectedUser)
+   - Si el componente va a editar el objeto → devuelve una copia: {...user}.
+   - Evita mutar directamente el objeto original del servicio.
+   - Mantén inmutabilidad para prevenir efectos colaterales.
+
+3. SERVICIOS MOCK (in-memory)
+   - Devuelve copias nuevas en findAllV2: of([...this.users]).
+   - Simula el comportamiento real del backend (cada llamada entrega datos frescos).
+   - Útil para pruebas y evitar problemas de detección de cambios.
+
+4. SERVICIOS CON BACKEND REAL
+   - No devuelvas copias en el servicio, el backend ya entrega datos nuevos.
+   - Contrato típico:
+       - GET → devuelve lista/objeto nuevo.
+       - POST/PUT → devuelve el objeto creado/actualizado.
+       - DELETE → devuelve void.
+   - El componente refresca con findAll() después de un DELETE.
+
+5. DELETE (borrado de registros)
+   - Servicio devuelve void (mock y backend).
+   - Componente:
+       - Llama al delete.
+       - Luego refresca la lista con findAll() o loadUsers().
+   - No mezclar filter local + delete → genera inconsistencias.
+
+6. REGLA DE ORO
+   - Si necesitas que Angular detecte un cambio → usa copias (spread {...}, [...]).
+   - Si el backend ya entrega datos frescos → usa referencias directas.
+   - Mantén consistencia: mock y backend deben tener contratos similares.
+
+===========================
+
+# CUÁNDO USAR COPIAS EN ANGULAR (arrays y objetos)
+
+## Regla práctica:
+
+Usás copias cuando querés:
+
+* disparar actualización de UI
+* evitar mutaciones accidentales
+* trabajar de forma reactiva/inmutable
+* facilitar change detection
+* evitar efectos secundarios
+
+## Ejemplo:
+
+Mejor:
+
+this.users = [...this.users, newUser];
+
+En vez de:
+
+this.users.push(newUser);
+
+## ¿Por qué?
+
+push() modifica el mismo array.
+[...] crea una referencia nueva.
+
+Angular detecta mucho mejor referencias nuevas.
+
+# REGLA MENTAL IMPORTANTE
+
+Angular detecta referencias mejor que mutaciones.
+
+Esto:
+
+this.users.push(user);
+
+mantiene la MISMA referencia.
+
+Esto:
+
+this.users = [...this.users, user];
+
+crea una referencia nueva.
+
+Muchos componentes/renderizados reaccionan mejor al segundo enfoque.
+
+# CUÁNDO NO HACE FALTA COPIAR
+
+No necesitás copiar:
+
+* variables primitivas (number, string, boolean)
+* datos temporales
+* cálculos internos
+* cuando no hay UI/reactividad involucrada
+
+Ejemplo:
+
+let total = subtotal + tax;
+
+No hay motivo para copiar.
+
+# CUÁNDO SÍ CONVIENE COPIAR ARRAYS/OBJETOS
+
+1. Antes de devolver datos desde un service
+
+---
+
+Muy recomendado:
+
+findAllV2(): Observable<User[]> {
+return of([...this.users]);
+}
+
+Porque protegés el estado interno.
+
+Si devolvés:
+
+return of(this.users);
+
+el componente podría hacer:
+
+users.pop();
+
+y romper el estado del service.
+
+2. Cuando actualizás estado
+
+---
+
+Malo:
+
+user.name = 'Juan';
+
+Mejor:
+
+user = {
+...user,
+name: 'Juan'
+};
+
+3. Con ChangeDetectionStrategy.OnPush
+
+---
+
+Acá muchas veces ES obligatorio.
+
+Angular OnPush depende muchísimo de referencias nuevas.
+
+# EJEMPLO VISUAL
+
+## Mutación:
+
+const arr = [1,2,3];
+
+const same = arr;
+
+same.push(4);
+
+console.log(arr);
+
+Resultado:
+
+[1,2,3,4]
+
+Porque ambos apuntan al mismo array.
+
+## Copia:
+
+const arr = [1,2,3];
+
+const copy = [...arr];
+
+copy.push(4);
+
+console.log(arr);
+
+Resultado:
+
+[1,2,3]
+
+# REGLA PRÁCTICA PARA ANGULAR
+
+Preferí:
+
+this.users = this.users.filter(...)
+this.users = [...this.users]
+this.user = {...user}
+
+En vez de:
+
+push()
+splice()
+pop()
+mutación directa
+
+# IDEA CLAVE
+
+No es que “copiar siempre es mejor”.
+
+La pregunta correcta es:
+
+“¿Necesito una referencia nueva para que Angular/reactividad/UI detecte cambios correctamente?”
+
+Si la respuesta es sí → copiá.
