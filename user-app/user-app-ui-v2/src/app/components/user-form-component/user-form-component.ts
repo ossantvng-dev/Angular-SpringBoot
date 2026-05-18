@@ -25,7 +25,10 @@ export class UserFormComponent {
     // 2. If object does not come in the state, use param id
     const id = this.route.snapshot.paramMap.get('id');
 
+    //console.log('user.id:', this.user.id, 'route id:', id);
+
     if (!this.user.id && id) {
+      console.log('Loading user from service ...');
       this.userService.findByIdV2(+id).subscribe((u) => {
         this.user = u ?? new User();
       });
