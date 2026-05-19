@@ -1,6 +1,7 @@
 <div class="container my-4">
   <h3 class="text-center">{{ title }}</h3>
   <button class="btn btn-primary my-3" [routerLink]="['/users/create']">Create User</button>
+
   @if (users.length == 0) {
     <div class="alert alert-warning">There are no records in the system!</div>
   } @else {
@@ -25,12 +26,7 @@
             <td>{{ user.email }}</td>
             <td>{{ user.username }}</td>
             <td>
-              <button 
-                class="btn btn-danger btn-sm" 
-                (click)="onRemoveUser(user.id)"
-              >
-                Remove
-            </button>
+              <button class="btn btn-danger btn-sm" (click)="onRemoveUser(user.id)">Remove</button>
             </td>
             <td>
               <button
@@ -45,5 +41,16 @@
         }
       </tbody>
     </table>
+
+    <app-pagination
+      [currentPage]="currentPage"
+      [totalPages]="totalPages"
+      [pageSize]="pageSize"
+      [totalElements]="totalElements"
+      [pageSizes]="pageSizes"
+      (pageChange)="goToPage($event)"
+      (pageSizeChange)="changePageSize($event)"
+    >
+    </app-pagination>
   }
 </div>

@@ -4,6 +4,7 @@ import { map, Observable, of } from 'rxjs';
 import { USERS_MOCK_LIST } from '../utils/user.mock.data';
 import { getNextUserId } from '../utils/utils';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { Pagination } from '../models/pagination';
 
 @Injectable({
   providedIn: 'root',
@@ -15,16 +16,14 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
-  findAll(page?: number, size?: number): Observable<User[]> {
+  findAll(page?: number, size?: number): Observable<Pagination<User>> {
     let params = new HttpParams();
     if (page !== undefined && size !== undefined) {
       params = params.set('page', page.toString()).set('size', size.toString());
     } else {
       params = params.set('page', '0').set('size', '20');
     }
-    return this.http
-      .get<{ content: User[] }>(this.apiUrl, { params })
-      .pipe(map(response => response.content));
+    return this.http.get<Pagination<User>>(this.apiUrl, { params });   
   }
 
   findAllV2(): Observable<User[]> {

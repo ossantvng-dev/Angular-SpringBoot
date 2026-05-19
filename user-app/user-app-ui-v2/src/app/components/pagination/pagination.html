@@ -1,0 +1,42 @@
+<!-- Range indicator -->
+<div class="text-center my-2">
+  Showing {{ getStartIndex() }} – {{ getEndIndex() }} of {{ totalElements }} users
+</div>
+
+<!-- Page size selector -->
+<div class="d-flex justify-content-center my-3">
+  <label class="me-2">Items per page:</label>
+
+  <select
+    class="form-select w-auto"
+    [(ngModel)]="pageSize"
+    (ngModelChange)="changePageSize($event)"
+  >
+    @for (size of pageSizes; track size) {
+      <option [ngValue]="size">
+        {{ size }}
+      </option>
+    }
+  </select>
+</div>
+
+<!-- Pagination controls -->
+<nav aria-label="Page navigation example" class="my-3">
+  <ul class="pagination justify-content-center">
+    <li class="page-item" [class.disabled]="currentPage === 0">
+      <a class="page-link" (click)="goToPage(currentPage - 1)"> Previous </a>
+    </li>
+
+    @for (page of getPages(); track page) {
+      <li class="page-item" [class.active]="page === currentPage">
+        <a class="page-link" (click)="goToPage(page)">
+          {{ page + 1 }}
+        </a>
+      </li>
+    }
+
+    <li class="page-item" [class.disabled]="currentPage >= totalPages - 1">
+      <a class="page-link" (click)="goToPage(currentPage + 1)"> Next </a>
+    </li>
+  </ul>
+</nav>
