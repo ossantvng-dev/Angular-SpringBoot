@@ -11,7 +11,7 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
-    @Mapping(target = "password", ignore = true)
+    //@Mapping(target = "password", ignore = true)
     UserDTO toDTO(User user);
 
     User toEntity(UserDTO userDTO);
