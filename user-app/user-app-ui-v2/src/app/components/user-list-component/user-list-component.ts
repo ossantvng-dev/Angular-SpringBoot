@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { User } from '../../models/user';
 import Swal from 'sweetalert2';
 import { RouterModule } from '@angular/router';
@@ -25,7 +25,10 @@ export class UserListComponent implements OnInit {
   }
 
   loadUsers(): void {
-    this.userService.findAllV2().subscribe((users) => (this.users = users));
+    this.userService.findAll().subscribe(users => {
+      this.users = users;
+      this.cdr.detectChanges();
+    });
   }
 
   /*onRemoveUser(userId: number): void {
@@ -44,7 +47,7 @@ export class UserListComponent implements OnInit {
       cancelButtonText: 'Cancel',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.userService.removeV2(userId).subscribe(() => {
+        this.userService.remove(userId).subscribe(() => {
           this.loadUsers();
           this.cdr.detectChanges();
         });

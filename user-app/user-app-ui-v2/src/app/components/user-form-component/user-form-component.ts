@@ -29,7 +29,7 @@ export class UserFormComponent {
 
     if (!this.user.id && id) {
       console.log('Loading user from service ...');
-      this.userService.findByIdV2(+id).subscribe((u) => {
+      this.userService.findById(+id).subscribe((u) => {
         this.user = u ?? new User();
       });
     }
@@ -38,7 +38,7 @@ export class UserFormComponent {
   onSubmit(userForm: NgForm): void {
     if (userForm.valid) {
       if (this.user.id > 0) {
-        this.userService.updateV2(this.user).subscribe(() => {
+        this.userService.update(this.user).subscribe(() => {
           Swal.fire({
             title: 'User updated',
             text: `User ${this.user.name} was successfully updated.`,
@@ -47,7 +47,7 @@ export class UserFormComponent {
           }).then(() => this.router.navigate(['/users']));
         });
       } else {
-        this.userService.createV2(this.user).subscribe(() => {
+        this.userService.create(this.user).subscribe(() => {
           Swal.fire({
             title: 'User created',
             text: `User ${this.user.name} was successfully created.`,

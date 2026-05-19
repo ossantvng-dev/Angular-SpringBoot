@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { User } from '../models/user';
-import { Observable, of } from 'rxjs';
+import { map, Observable, of } from 'rxjs';
 import { USERS_MOCK_LIST } from '../utils/user.mock.data';
 import { getNextUserId } from '../utils/utils';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -15,8 +15,16 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
-  findAll(): Observable<User[]> {
-    return this.http.get<User[]>(this.apiUrl);
+  findAll(page?: number, size?: number): Observable<User[]> {
+    let params = new HttpParams();
+    if (page !== undefined && size !== undefined) {
+      params = params.set('page', page.toString()).set('size', size.toString());
+    } else {
+      params = params.set('page', '0').set('size', '20');
+    }
+    return this.http
+      .get<{ content: User[] }>(this.apiUrl, { params })
+      .pipe(map(response => response.content));
   }
 
   findAllV2(): Observable<User[]> {

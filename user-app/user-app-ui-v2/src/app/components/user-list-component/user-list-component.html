@@ -2,7 +2,7 @@
   <h3 class="text-center">{{ title }}</h3>
   <button class="btn btn-primary my-3" [routerLink]="['/users/create']">Create User</button>
   @if (users.length == 0) {
-    <div class="alert alert-warning">No hay registros en el sistema!</div>
+    <div class="alert alert-warning">There are no records in the system!</div>
   } @else {
     <table class="table table-hover table-striped">
       <thead>
