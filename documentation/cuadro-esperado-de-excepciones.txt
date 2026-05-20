@@ -1,0 +1,9 @@
+
+
+| Caso                  | Status |
+| --------------------- | ------ |
+| login fail            | 401    |
+| invalid refresh token | 401    |
+| expired JWT           | 401    |
+| forbidden role        | 403    |
+| validation error      | 400    |
