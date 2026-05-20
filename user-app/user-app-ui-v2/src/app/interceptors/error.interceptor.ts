@@ -17,13 +17,9 @@ export class ErrorInterceptor implements HttpInterceptor {
       catchError((err: HttpErrorResponse) => {
         let message = 'Unexpected error';
 
-        if (err.status === 400 && err.error) {
-          // backend returns Map<String,String>
-          message = Object.entries(err.error)
-            .map(([field, msg]) => `${field}: ${msg}`)
-            .join('\n');
-        } else if (err.status === 500 && err.error?.error) {
-          message = err.error.error;
+        if (err.error && err.error.message) {
+          // ApiError has a message field
+          message = err.error.message;
         }
 
         Swal.fire({

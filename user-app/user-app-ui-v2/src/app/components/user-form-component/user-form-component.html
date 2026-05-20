@@ -78,21 +78,21 @@
           </div>
           <div>
             <input
-              placeholder="Password"
+              placeholder="{{ user.id > 0 ? 'New Password (optional)' : 'Password' }}"
               name="password"
               type="password"
               [(ngModel)]="user.password"
               class="form-control my-2"
-              required
+              [required]="user.id === 0"
               minlength="6"
               #password="ngModel"
             />
             @if (password.invalid && (password.dirty || password.touched)) {
-              @if (password.errors!['required']) {
+              @if (password.errors?.['required'] && user.id === 0) {
                 <div class="text-danger">Password is required</div>
               }
-              @if (password.errors!['minlength']) {
-                <div class="text-danger">Password must have at least 6 characteres</div>
+              @if (password.errors?.['minlength']) {
+                <div class="text-danger">Password must have at least 6 characters</div>
               }
             }
           </div>
