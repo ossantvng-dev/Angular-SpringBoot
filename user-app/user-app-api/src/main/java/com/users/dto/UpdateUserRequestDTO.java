@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDTO {
+public class UpdateUserRequestDTO {
 
     private Long id;
 
@@ -30,7 +30,6 @@ public class UserDTO {
     @Size(min = 8, message = "Username must have at least 8 characters")
     private String username;
 
-    @NotBlank(message = "Password is required")
     @Size(min = 6, message = "Password must have at least 6 characters")
     private String password;
 

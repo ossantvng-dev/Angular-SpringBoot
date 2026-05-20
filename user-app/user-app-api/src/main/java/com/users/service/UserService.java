@@ -1,18 +1,20 @@
 package com.users.service;
 
-import com.users.dto.UserDTO;
+import com.users.dto.CreateUserRequestDTO;
+import com.users.dto.UpdateUserRequestDTO;
+import com.users.dto.UserResponseDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface UserService {
 
-    UserDTO create(UserDTO userDTO);
+    UserResponseDTO create(CreateUserRequestDTO dto);
 
-    UserDTO update(Long id, UserDTO userDTO);
+    UserResponseDTO update(Long id, UpdateUserRequestDTO dto);
 
-    Page<UserDTO> findAll(Pageable pageable);
+    Page<UserResponseDTO> findAll(Pageable pageable);
 
-    UserDTO findById(Long id);
+    UserResponseDTO findById(Long id);
 
     void deleteById(Long id);
 }
