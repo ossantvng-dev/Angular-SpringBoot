@@ -1,2 +1,5 @@
-<app-navbar />
+@if (!isLoginRoute()) {
+  <app-navbar />
+}
+
 <router-outlet />

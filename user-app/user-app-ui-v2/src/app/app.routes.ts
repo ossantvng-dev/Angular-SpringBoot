@@ -1,12 +1,17 @@
 import { Routes } from '@angular/router';
 import { UserFormComponent } from './components/user-form-component/user-form-component';
 import { UserListComponent } from './components/user-list-component/user-list-component';
+import { LoginComponent } from './components/login-component/login-component';
 
 export const routes: Routes = [
     {
         path: '',
         pathMatch: 'full',
-        redirectTo: '/users'
+        redirectTo: 'login'
+    },
+    {
+        path: 'login',
+        component: LoginComponent
     },
     {
         path: 'users',

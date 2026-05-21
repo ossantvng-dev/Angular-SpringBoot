@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { Navbar } from './components/navbar/navbar';
 
 @Component({
@@ -10,4 +10,9 @@ import { Navbar } from './components/navbar/navbar';
 })
 export class App {
   protected readonly title = signal('user-app-ui-v2');
+
+  constructor(private router: Router) {}
+
+  isLoginRoute(): boolean { return this.router.url === '/login'; }
+  
 }
