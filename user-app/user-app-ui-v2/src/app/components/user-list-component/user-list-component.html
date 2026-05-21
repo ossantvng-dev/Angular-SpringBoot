@@ -1,7 +1,8 @@
 <div class="container my-4">
   <h3 class="text-center">{{ title }}</h3>
-  <button class="btn btn-primary my-3" [routerLink]="['/users/create']">Create User</button>
-
+  @if (authService.isAdmin()) {
+    <button class="btn btn-primary my-3" [routerLink]="['/users/create']">Create User</button>
+  }
   @if (users.length == 0) {
     <div class="alert alert-warning">There are no records in the system!</div>
   } @else {
@@ -13,8 +14,10 @@
           <th>Last name</th>
           <th>Email</th>
           <th>Username</th>
-          <th>Remove</th>
-          <th>Update</th>
+          @if (authService.isAdmin()) {
+            <th>Remove</th>
+            <th>Update</th>
+          }
         </tr>
       </thead>
       <tbody>
@@ -25,18 +28,22 @@
             <td>{{ user.lastName }}</td>
             <td>{{ user.email }}</td>
             <td>{{ user.username }}</td>
-            <td>
-              <button class="btn btn-danger btn-sm" (click)="onRemoveUser(user.id)">Remove</button>
-            </td>
-            <td>
-              <button
-                class="btn btn-info btn-sm"
-                [routerLink]="['/users/edit', user.id]"
-                [state]="{ user: user }"
-              >
-                Update
-              </button>
-            </td>
+            @if (authService.isAdmin()) {
+              <td>
+                <button class="btn btn-danger btn-sm" (click)="onRemoveUser(user.id)">
+                  Remove
+                </button>
+              </td>
+              <td>
+                <button
+                  class="btn btn-info btn-sm"
+                  [routerLink]="['/users/edit', user.id]"
+                  [state]="{ user: user }"
+                >
+                  Update
+                </button>
+              </td>
+            }
           </tr>
         }
       </tbody>

@@ -28,7 +28,6 @@ export class LoginComponent {
       .subscribe({
         next: (response) => {
           this.authService.saveTokens(response.accessToken, response.refreshToken);
-          
           Swal.fire({
             title: 'Welcome',
             text: 'Login successful',

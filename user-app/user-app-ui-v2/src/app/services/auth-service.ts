@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { AuthResponse } from '../models/auth/auth-response';
 import { LoginRequest } from '../models/auth/login-request';
 import { RefreshTokenRequest } from '../models/auth/refresh-token-request';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root',
@@ -47,9 +48,64 @@ export class AuthService {
   clearTokens(): void {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
+    localStorage.removeItem('username');
   }
 
   isAuthenticated(): boolean {
-    return !!this.getAccessToken();
+    const token = this.getAccessToken();
+
+    if (!token) {
+      return false;
+    }
+
+    return !this.isTokenExpired();
+  }
+
+  refreshAccessToken(): Observable<AuthResponse> {
+    const token = this.getRefreshToken();
+
+    return this.refresh({
+      refreshToken: token!,
+    });
+  }
+
+  getDecodedToken(): any {
+    const token = this.getAccessToken();
+
+    if (!token) {
+      return null;
+    }
+
+    return jwtDecode(token);
+  }
+
+  getUsername(): string {
+    const decodedToken = this.getDecodedToken();
+    return decodedToken?.sub || '';
+  }
+
+  isTokenExpired(): boolean {
+    const decodedToken = this.getDecodedToken();
+
+    if (!decodedToken) {
+      return true;
+    }
+
+    const currentTime = Math.floor(Date.now() / 1000);
+
+    return decodedToken.exp < currentTime;
+  }
+
+  getRoles(): string[] {
+    const decodedToken = this.getDecodedToken();
+    return decodedToken?.roles || [];
+  }
+  
+  hasRole(role: string): boolean {
+    return this.getRoles().includes(role);
+  }
+
+  isAdmin(): boolean {
+    return this.hasRole('ROLE_ADMIN');
   }
 }

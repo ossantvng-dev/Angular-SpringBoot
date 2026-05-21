@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { UserService } from '../../services/user-service';
 import { FormsModule } from '@angular/forms';
 import { Pagination } from "../pagination/pagination";
+import { AuthService } from '../../services/auth-service';
 
 @Component({
   selector: 'user-list-component',
@@ -24,6 +25,7 @@ export class UserListComponent implements OnInit {
   constructor(
     private userService: UserService,
     private cdr: ChangeDetectorRef,
+    public authService: AuthService
   ) {}
 
   ngOnInit(): void {
