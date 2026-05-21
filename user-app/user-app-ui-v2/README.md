@@ -1,59 +1,78 @@
-# UserAppUi
+# UserAppUi (Frontend)
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.2.
+A modern Angular frontend application for user management with JWT authentication, role-based access control, and automatic token refresh.
 
-## Development server
+---
 
-To start a local development server, run:
+## 🚀 Tech Stack
 
-```bash
-ng serve
-```
+- Angular 21
+- RxJS
+- Bootstrap 5
+- SweetAlert2
+- JWT Authentication
+- HTTP Interceptors
+- Route Guards (Auth + Role-based)
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+---
 
-## Code scaffolding
+## 📌 Project Overview
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+This project is a **frontend UI for a user management system** connected to a Spring Boot backend.
 
-```bash
-ng generate component component-name
-```
+It includes:
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+- JWT-based authentication
+- Automatic token refresh
+- Role-based authorization (`ROLE_USER`, `ROLE_ADMIN`)
+- Protected routes
+- Dynamic UI based on user roles
+- Global error handling
+- Responsive UI using Bootstrap
 
-```bash
-ng generate --help
-```
+---
 
-## Building
+## 🔐 Authentication Flow
 
-To build the project run:
+1. User logs in with username and password
+2. Backend returns:
+   - Access Token (JWT)
+   - Refresh Token
+3. Tokens are stored in `localStorage`
+4. Access token is automatically attached to every HTTP request
+5. When token expires:
+   - Refresh token is used automatically
+   - New tokens are stored
+   - Original request is retried
 
-```bash
-ng build
-```
+---
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## 🧠 Role-Based Access Control
 
-## Running unit tests
+The application supports two roles:
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+- `ROLE_USER`
+- `ROLE_ADMIN`
 
-```bash
-ng test
-```
+### Permissions:
 
-## Running end-to-end tests
+| Feature             | USER | ADMIN |
+|--------------------|------|-------|
+| View users         | ✔    | ✔     |
+| Create user        | ❌    | ✔     |
+| Edit user          | ❌    | ✔     |
+| Delete user        | ❌    | ✔     |
 
-For end-to-end (e2e) testing, run:
+Roles are extracted from the JWT token claims.
 
-```bash
-ng e2e
-```
+---
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+## 🧭 Routing Structure
 
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+```ts
+/login
+/users
+/users/create
+/users/edit/:id
+/unauthorized
+/not-found
