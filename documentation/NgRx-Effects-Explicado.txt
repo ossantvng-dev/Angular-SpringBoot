@@ -1,0 +1,140 @@
+======================== Qué es un effect? ========================
+	
+Un Effect es una pieza de código que escucha acciones de NgRx y ejecuta tareas externas (API, storage, router, etc.)
+
+
+======================== NGXS / NGRX EFFECTS EXPLICADO ========================
+
+⚡ actions$
+
+private actions$ = inject(Actions);
+
+QUÉ ES:
+Es un Observable global que contiene TODAS las acciones de NgRx.
+
+IDEA CLAVE:
+Todo lo que haces con:
+store.dispatch(...)
+pasa por actions$.
+
+POR QUÉ TIENE $:
+Porque es un Observable (stream reactivo).
+
+---------------------------------------------------------------------------
+
+⚡ ofType(...)
+
+ofType(AuthActions.login)
+
+QUÉ HACE:
+Filtra acciones del stream global.
+
+TRADUCCIÓN:
+“Solo deja pasar acciones del tipo LOGIN”.
+
+EJEMPLO:
+
+store.dispatch(login())
+store.dispatch(logout())
+store.dispatch(login())
+
+RESULTADO:
+Solo pasan los login.
+
+---------------------------------------------------------------------------
+
+⚡ switchMap(...)
+
+switchMap(({ request }) =>
+  this.authService.login(request)
+)
+
+QUÉ HACE:
+Convierte una acción en una llamada HTTP.
+
+COMPORTAMIENTO:
+- Ejecuta la petición HTTP
+- Cancela la anterior si llega otra nueva
+- Usa solo el último request
+
+EJEMPLO:
+
+login A
+login B
+login C
+
+RESULTADO:
+Solo se ejecuta C
+
+TRADUCCIÓN:
+“Si llega otro login, cancela el anterior”.
+
+---------------------------------------------------------------------------
+
+⚡ map(...)
+
+map(response =>
+  AuthActions.loginSuccess({ response })
+)
+
+QUÉ HACE:
+Transforma datos.
+
+TRADUCCIÓN:
+Convierte respuesta HTTP → acción SUCCESS de NgRx.
+
+---------------------------------------------------------------------------
+
+⚡ catchError(...)
+
+catchError(error =>
+  of(AuthActions.loginFailure({ error }))
+)
+
+QUÉ HACE:
+Captura errores HTTP.
+
+TRADUCCIÓN:
+Si falla la petición, dispara acción FAILURE sin romper el stream.
+
+---------------------------------------------------------------------------
+
+🔥 FLUJO COMPLETO DEL EFFECT
+
+LOGIN ACTION
+   ↓
+ofType filtra login
+   ↓
+switchMap ejecuta HTTP request
+   ↓
+map → loginSuccess (si todo OK)
+   ↓
+catchError → loginFailure (si falla)
+
+---------------------------------------------------------------------------
+
+🧠 ARQUITECTURA ANTES VS AHORA
+
+ANTES:
+Component → Service → subscribe()
+
+AHORA (NGRX):
+Component → store.dispatch(action)
+                     ↓
+                  Effect (API call)
+                     ↓
+                  Reducer (estado)
+                     ↓
+                  Store actualizado
+
+---------------------------------------------------------------------------
+
+⚡ CONCEPTOS CLAVE
+
+- actions$   → stream global de acciones
+- ofType     → filtro de acciones específicas
+- switchMap  → ejecuta HTTP y cancela anteriores
+- map        → transforma respuesta en acción
+- catchError → maneja errores sin romper flujo
+
+===============================================================================

@@ -1,0 +1,34 @@
+El operador pipe en los Observables de RxJS se utiliza para encadenar múltiples operadores (como map, filter, o tap) de forma secuencial. 
+Permite que los datos fluyan a través de estas funciones puras, transformando el valor original sin modificar el Observable inicial.
+
+¿Por qué es tan importante?
+
+	Composición pura: 
+		
+		Los operadores dentro del pipe son funciones puras. Reciben un Observable de entrada y devuelven uno nuevo de salida, 
+		dejando el Observable original intacto.
+	
+	Legibilidad: 
+		
+		Al colocar los operadores en el pipe, puedes leer y entender el flujo de tus datos claramente de arriba hacia abajo o de izquierda a derecha.
+		
+	Mantenibilidad: 
+	
+		Facilita la reutilización de lógica y evita el anidamiento complejo de funciones.
+		
+		
+Ejemplo
+
+	
+	import { of } from 'rxjs';
+	import { filter, map } from 'rxjs/operators';
+
+	const numeros$ = of(1, 2, 3, 4, 5);
+
+	const numerosParesDobles$ = numeros$.pipe(
+	  filter(n => n % 2 === 0), // Pasan solo el 2 y el 4
+	  map(n => n * 2)           // Transforman a 4 y 8
+	);
+
+	numerosParesDobles$.subscribe(valor => console.log(valor)); 
+	// Resultado en consola: 4, 8
