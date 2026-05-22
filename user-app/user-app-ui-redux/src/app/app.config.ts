@@ -8,6 +8,8 @@ import { JwtInterceptor } from './interceptors/jwt.interceptor';
 import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
+import { authReducer } from './auth/auth.reducer';
+import { AuthEffects } from './auth/auth.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -24,8 +26,10 @@ export const appConfig: ApplicationConfig = {
       useClass: ErrorInterceptor,
       multi: true,
     },
-    provideStore(),
-    provideEffects(),
+    provideStore({
+      auth: authReducer
+    }),
+    provideEffects(AuthEffects),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
   ],
 };
