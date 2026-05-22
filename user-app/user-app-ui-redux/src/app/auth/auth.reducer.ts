@@ -17,6 +17,7 @@ export const authReducer = createReducer(
   on(AuthActions.login, (state) => ({
     ...state,
     loading: true,
+    error: null
   })),
 
   on(AuthActions.loginSuccess, (state, { response }) => {
@@ -30,12 +31,14 @@ export const authReducer = createReducer(
       roles: decoded?.roles || [],
       isAuthenticated: true,
       loading: false,
+      error: null
     };
   }),
 
-  on(AuthActions.loginFailure, (state) => ({
+  on(AuthActions.loginFailure, (state, { error }) => ({
     ...state,
     loading: false,
+    error,
   })),
 
   on(AuthActions.logout, () => initialAuthState),
@@ -51,6 +54,7 @@ export const authReducer = createReducer(
       roles: decoded?.roles || [],
       isAuthenticated: true,
       loading: false,
+      error: null
     };
   }),
 );

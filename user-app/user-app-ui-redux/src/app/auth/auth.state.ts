@@ -5,6 +5,7 @@ export interface AuthState {
   roles: string[];
   isAuthenticated: boolean;
   loading: boolean;
+  error: any | null
 }
 
 export const initialAuthState: AuthState = {
@@ -14,4 +15,5 @@ export const initialAuthState: AuthState = {
   roles: [],
   isAuthenticated: false,
   loading: false,
+  error: null
 };

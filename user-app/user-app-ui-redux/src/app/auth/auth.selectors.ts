@@ -8,8 +8,27 @@ export const selectIsAuthenticated = createSelector(
   (state) => state.isAuthenticated,
 );
 
-export const selectUsername = createSelector(selectAuthState, (state) => state.username);
+export const selectUsername = createSelector(
+  selectAuthState, 
+  (state) => state.username
+);
 
-export const selectRoles = createSelector(selectAuthState, (state) => state.roles);
+export const selectRoles = createSelector(
+  selectAuthState, 
+  (state) => state.roles
+);
 
-export const selectAccessToken = createSelector(selectAuthState, (state) => state.accessToken);
+export const selectAccessToken = createSelector(
+  selectAuthState, 
+  (state) => state.accessToken
+);
+
+export const selectRefreshToken = createSelector(
+  selectAuthState, 
+  (state) => state.refreshToken
+);
+
+export const selectIsAdmin = createSelector(
+  selectRoles, 
+  (roles) => roles.includes('ROLE_ADMIN')
+);

@@ -1,43 +1,38 @@
 import { Component } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
-import { AuthService } from '../../services/auth-service';
-import Swal from 'sweetalert2';
+import { RouterModule } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+
+import * as AuthSelectors from '../../auth/auth.selectors';
+import * as AuthActions from '../../auth/auth.actions';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterModule],
+  imports: [RouterModule, AsyncPipe],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
 })
 export class Navbar {
-  constructor(
-    public authService: AuthService,
-    private router: Router,
-  ) {}
 
-  get username(): string {
-    return this.authService.getUsername();
+  isAuthenticated$: Observable<boolean>;
+  username$: Observable<string | null>;
+  isAdmin$: Observable<boolean>;
+
+  constructor(private store: Store) {
+
+    this.isAuthenticated$ =
+      this.store.select(AuthSelectors.selectIsAuthenticated);
+
+    this.username$ =
+      this.store.select(AuthSelectors.selectUsername);
+
+    this.isAdmin$ =
+      this.store.select(AuthSelectors.selectIsAdmin);
   }
 
   logout(): void {
-    this.authService.logout().subscribe({
-      next: () => this.finishLogout(),
-      error: () => this.finishLogout(),
-    });
-  }
-
-  private finishLogout(): void {
-    this.authService.clearTokens();
-
-    Swal.fire({
-      title: 'Bye',
-      text: 'Session closed successfully',
-      icon: 'success',
-      timer: 1500,
-      showConfirmButton: false,
-    });
-
-    this.router.navigate(['/login']);
+    this.store.dispatch(AuthActions.logout());
   }
 }
