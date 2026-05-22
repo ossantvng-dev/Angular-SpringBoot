@@ -9,27 +9,23 @@ import {
 
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import Swal from 'sweetalert2';
-import { Router } from '@angular/router';
-import { AuthService } from '../services/auth-service';
+
+import { AlertService } from '../services/alert-service';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
-  constructor(
-    private authService: AuthService,
-    private router: Router,
-  ) {}
+  constructor(private alert: AlertService) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(
       catchError((err: HttpErrorResponse) => {
-        // Login / refresh no se interceptan como errores globales
+        /*
+          Login y refresh NO muestran popup global
+          porque esos errores los maneja AuthEffects
+        */
         if (this.isAuthUrl(req.url)) {
           return throwError(() => err);
         }
-
-        const isAuthError = err.status === 401;
-        const isRefreshRequest = req.url.includes('/auth/refresh');
 
         let message = 'Unexpected error';
 
@@ -38,36 +34,10 @@ export class ErrorInterceptor implements HttpInterceptor {
         }
 
         /*
-          Si refresh falla => logout real
-          (esto significa: refresh token inválido o expirado)
+          SOLO errores globales NO auth
         */
-        if (isAuthError && isRefreshRequest) {
-          this.authService.clearTokens();
-
-          this.router.navigate(['/login']);
-
-          Swal.fire({
-            title: 'Session expired',
-            text: 'Please login again',
-            icon: 'warning',
-          });
-
-          return throwError(() => err);
-        }
-
-        /*
-          Solo mostrar errores no controlados:
-          
-          ¿Qué significa "no controlado" aquí?
-          → errores que NO son parte del flujo de auth (login/refresh)
-          → ejemplos: 500 backend, validaciones, errores de negocio, CORS, etc.
-        */
-        if (!isAuthError) {
-          Swal.fire({
-            title: 'Error',
-            text: message,
-            icon: 'error',
-          });
+        if (err.status !== 401) {
+          this.alert.error(message);
         }
 
         return throwError(() => err);

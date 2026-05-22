@@ -1,6 +1,6 @@
 El operador tap en RxJS permite ejecutar efectos secundarios (como imprimir en consola o guardar estados) 
 sobre un flujo observable sin modificar los datos emitidos. Actúa como un observador transparente que transmite 
-los valores intactos al siguiente operador en la cadena.
+los valores intactos al siguiente operador en la cadena. Tap no cambia el flujo.
 
 Casos de uso principales
 
@@ -30,3 +30,18 @@ Ejemplo de uso
 	  }),
 	  map(valor => valor * 2) // Transforma el valor a su doble
 	).subscribe(resultado => console.log(`Resultado final: ${resultado}`));
+	
+	
+Regla mental
+
+	tap() = "hacer algo adicional"
+
+
+		Ejemplos:
+
+		* navegar
+		* logs
+		* alerts
+		* localStorage
+		* analytics
+

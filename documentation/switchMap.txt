@@ -1,0 +1,98 @@
+# RxJS switchMap()
+
+`switchMap()` se usa cuando:
+
+```text
+un observable dispara OTRO observable
+```
+
+MUY común en:
+
+* HTTP calls
+* Redux effects
+* chained async flows
+
+---
+
+# Ejemplo típico
+
+```ts
+this.actions$.pipe(
+
+  ofType(login),
+
+  switchMap(({ request }) =>
+    this.authService.login(request)
+  )
+)
+```
+
+---
+
+# Qué pasa aquí
+
+1. llega action login
+2. switchMap ejecuta HTTP request
+3. devuelve nuevo observable
+4. RxJS "cambia" al observable interno
+
+
+
+# LO MÁS IMPORTANTE
+
+`switchMap()` CANCELA requests anteriores.
+
+
+# Ejemplo real
+
+Usuario hace click 5 veces:
+
+```text
+LOGIN
+LOGIN
+LOGIN
+LOGIN
+```
+
+Con switchMap:
+
+```text
+❌ cancela requests viejos
+✅ deja solo el último
+```
+
+Excelente para auth/search/etc.
+
+---
+
+
+## switchMap()
+
+```text
+"cambia a otro observable"
+```
+
+SÍ cambia flujo.
+
+
+## switchMap()
+
+```ts
+A ---- switchMap() ---- Observable<B>
+```
+
+Transforma el flujo async.
+
+---
+
+# En NgRx normalmente:
+
+## switchMap
+
+Para:
+
+* HTTP requests
+* APIs
+* async work
+
+---
