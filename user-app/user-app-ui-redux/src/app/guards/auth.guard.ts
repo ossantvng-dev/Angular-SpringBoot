@@ -1,29 +1,43 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-
-import { map, take } from 'rxjs';
+import { filter, map, take, tap } from 'rxjs';
 
 import * as AuthSelectors from '../auth/auth.selectors';
+import { AuthService } from '../services/auth-service';
+
 
 export const authGuard: CanActivateFn = () => {
-
   const store = inject(Store);
   const router = inject(Router);
+  const authService = inject(AuthService);
 
-  return store.select(AuthSelectors.selectIsAuthenticated).pipe(
+  return store.select(AuthSelectors.selectAuthState).pipe(
+    tap((state) => {
+      console.log('AUTH GUARD STATE:', state);
+    }),
+
+    filter((state) => state.initialized),
 
     take(1),
 
-    map((isAuthenticated) => {
+    map((state) => {
+      console.log('FINAL AUTH STATE:', state);
 
-      if (isAuthenticated) {
-        return true;
+      const token = state.accessToken;
+
+      // token inválido o expirado
+      if (!token || authService.isTokenExpired()) {
+        console.log('TOKEN EXPIRED OR INVALID');
+
+        router.navigate(['/login']);
+
+        return false;
       }
 
-      router.navigate(['/login']);
+      console.log('ALLOW ACCESS');
 
-      return false;
+      return true;
     }),
   );
 };

@@ -1,0 +1,15 @@
+COMPONENT
+   ↓ dispatch
+ACTION
+   ↓
+EFFECT
+   ↓ API
+SERVICE
+   ↓ response
+SUCCESS / FAILURE ACTION
+   ↓
+REDUCER
+   ↓
+STORE
+   ↓ select
+UI reactiva

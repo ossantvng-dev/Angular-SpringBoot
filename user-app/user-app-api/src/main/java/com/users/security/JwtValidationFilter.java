@@ -2,7 +2,6 @@ package com.users.security;
 
 import com.users.service.JwtService;
 import com.users.service.JpaUserDetailsService;
-import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,9 +9,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -35,8 +34,11 @@ public class JwtValidationFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
 
+        System.out.println("JWT FILTER HIT - URL: " + request.getRequestURI());
+
         final String authHeader = request.getHeader("Authorization");
 
+        // 1. SIN TOKEN → dejar pasar (Spring decidirá si es público o no)
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
@@ -44,35 +46,66 @@ public class JwtValidationFilter extends OncePerRequestFilter {
 
         try {
             String token = authHeader.substring(7);
+
+            System.out.println("TOKEN RECEIVED: " + token);
+
+            // 2. EXTRAER USERNAME (puede fallar si token es basura)
             String username = jwtService.extractUsername(token);
 
+            System.out.println("USERNAME FROM TOKEN: " + username);
+
+            // 3. SOLO CONTINUAR SI NO HAY AUTH YA EN CONTEXTO
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+
                 var userDetails = userDetailsService.loadUserByUsername(username);
 
-                if (jwtService.isTokenValid(token, userDetails.getUsername())) {
+                // 4. VALIDACIÓN REAL DEL TOKEN
+                boolean isValid = jwtService.isTokenValid(token, userDetails.getUsername());
 
-                    List<SimpleGrantedAuthority> authorities =
-                            jwtService.extractRoles(token)
-                                    .stream()
-                                    .map(SimpleGrantedAuthority::new)
-                                    .toList();
+                if (!isValid) {
 
-                    UsernamePasswordAuthenticationToken authToken =
-                            new UsernamePasswordAuthenticationToken(
-                                    userDetails,
-                                    null,
-                                    authorities
-                            );
+                    System.out.println("INVALID TOKEN DETECTED");
 
-                    authToken.setDetails(new WebAuthenticationDetailsSource()
-                            .buildDetails(request));
+                    SecurityContextHolder.clearContext();
 
-                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                    authenticationEntryPoint.commence(
+                            request,
+                            response,
+                            new BadCredentialsException("Invalid or expired JWT token")
+                    );
+                    return; // CORTA EL FLUJO COMPLETAMENTE
                 }
+
+                // 5. ROLES
+                List<SimpleGrantedAuthority> authorities =
+                        jwtService.extractRoles(token)
+                                .stream()
+                                .map(SimpleGrantedAuthority::new)
+                                .toList();
+
+                // 6. CREAR AUTH CONTEXT
+                UsernamePasswordAuthenticationToken authToken =
+                        new UsernamePasswordAuthenticationToken(
+                                userDetails,
+                                null,
+                                authorities
+                        );
+
+                authToken.setDetails(
+                        new WebAuthenticationDetailsSource().buildDetails(request)
+                );
+
+                SecurityContextHolder.getContext().setAuthentication(authToken);
             }
+
+            // 7. CONTINUAR CADENA NORMAL
             filterChain.doFilter(request, response);
-        } catch (JwtException ex) {
+
+        } catch (Exception ex) {
+
+            // CUALQUIER ERROR DE TOKEN → 401 DIRECTO
             SecurityContextHolder.clearContext();
+
             authenticationEntryPoint.commence(
                     request,
                     response,

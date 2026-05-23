@@ -100,7 +100,7 @@ export class AuthService {
     const decodedToken = this.getDecodedToken();
     return decodedToken?.roles || [];
   }
-  
+
   hasRole(role: string): boolean {
     return this.getRoles().includes(role);
   }

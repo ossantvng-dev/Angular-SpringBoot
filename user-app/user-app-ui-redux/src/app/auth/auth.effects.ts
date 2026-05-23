@@ -37,7 +37,8 @@ export class AuthEffects {
         ofType(AuthActions.loginSuccess),
         tap(({ response }) => {
           this.alert.success('Login successful');
-          this.authService.saveTokens(response.accessToken, response.refreshToken);
+          localStorage.setItem('accessToken', response.accessToken);
+          localStorage.setItem('refreshToken', response.refreshToken);
           this.router.navigate(['/users']);
         }),
       ),
@@ -59,18 +60,70 @@ export class AuthEffects {
   );
 
   // =========================
-  // LOGOUT EFFECT SIDE EFFECT
+  // LOGOUT EFFECT
   // =========================
   logout$ = createEffect(
     () =>
       this.actions$.pipe(
         ofType(AuthActions.logout),
-        tap(() => {
-          this.authService.clearTokens();
-          this.alert.success('Session closed successfully');
-          this.router.navigate(['/login']);
-        }),
+
+        switchMap(() =>
+          this.authService.logout().pipe(
+            tap(() => {
+              localStorage.removeItem('accessToken');
+              localStorage.removeItem('refreshToken');
+
+              this.alert.success('Session closed successfully');
+
+              this.router.navigate(['/login']);
+            }),
+
+            catchError(() => {
+              localStorage.removeItem('accessToken');
+              localStorage.removeItem('refreshToken');
+
+              this.router.navigate(['/login']);
+
+              return of();
+            }),
+          ),
+        ),
       ),
+
     { dispatch: false },
+  );
+
+  // ===================================
+  // RESTORE SESSION EFFECT SIDE EFFECT
+  // ===================================
+  restoreSession$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthActions.restoreSession),
+
+      map(() => {
+        const accessToken = localStorage.getItem('accessToken');
+
+        const refreshToken = localStorage.getItem('refreshToken');
+
+        // no hay tokens
+        if (!accessToken || !refreshToken) {
+          return AuthActions.logout();
+        }
+
+        // token corrupto/mal formado
+        try {
+          JSON.parse(atob(accessToken.split('.')[1]));
+        } catch {
+          return AuthActions.logout();
+        }
+
+        // token válido estructuralmente
+        // aunque esté expirado, dejamos que interceptor haga refresh
+        return AuthActions.restoreSessionSuccess({
+          accessToken,
+          refreshToken,
+        });
+      }),
+    ),
   );
 }

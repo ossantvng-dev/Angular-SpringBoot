@@ -1,9 +1,11 @@
 package com.users.service;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.jspecify.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -20,8 +22,8 @@ public class JwtService {
 
     private static final String SECRET_KEY = "my-super-secret-key-my-super-secret-key";
 
-    // 1 hour
-    private static final long EXPIRATION_TIME = 1000 * 60 * 60;
+    @Value("${jwt.expiration}")
+    private long expirationTime;
 
     // HS256 requires minimum 256 bits = 32 bytes
     private SecretKey getSigningKey() {
@@ -43,7 +45,7 @@ public class JwtService {
                 .claims(claims)
                 .subject(userDetails.getUsername())
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .expiration(new Date(System.currentTimeMillis() + expirationTime))
                 .signWith(getSigningKey())
                 .compact();
     }
@@ -53,8 +55,12 @@ public class JwtService {
     }
 
     public boolean isTokenValid(String token, String username) {
-        String extractedUsername = extractUsername(token);
-        return extractedUsername.equals(username) && !isTokenExpired(token);
+        try {
+            String extractedUsername = extractUsername(token);
+            return extractedUsername.equals(username) && !isTokenExpired(token);
+        } catch (JwtException | IllegalArgumentException e) {
+            return false;
+        }
     }
 
     public List<String> extractRoles(String token) {

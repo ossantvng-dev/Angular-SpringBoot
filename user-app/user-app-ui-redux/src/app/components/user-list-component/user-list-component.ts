@@ -4,12 +4,16 @@ import Swal from 'sweetalert2';
 import { RouterModule } from '@angular/router';
 import { UserService } from '../../services/user-service';
 import { FormsModule } from '@angular/forms';
-import { Pagination } from "../pagination/pagination";
-import { AuthService } from '../../services/auth-service';
+import { Pagination } from '../pagination/pagination';
+import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import * as AuthSelectors from '../../auth/auth.selectors';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'user-list-component',
-  imports: [RouterModule, FormsModule, Pagination],
+  standalone: true,
+  imports: [RouterModule, FormsModule, Pagination, AsyncPipe],
   templateUrl: './user-list-component.html',
   styleUrl: './user-list-component.css',
 })
@@ -21,23 +25,46 @@ export class UserListComponent implements OnInit {
   pageSize: number = 5;
   pageSizes: number[] = [5, 10, 20];
   totalElements: number = 0;
+  isAdmin$!: Observable<boolean>;
 
   constructor(
     private userService: UserService,
     private cdr: ChangeDetectorRef,
-    public authService: AuthService
+    private store: Store,
   ) {}
 
   ngOnInit(): void {
+    this.isAdmin$ = this.store.select(AuthSelectors.selectIsAdmin);
     this.loadUsers();
   }
 
-  loadUsers(): void {
+  /*loadUsers(): void {
     this.userService.findAll(this.currentPage, this.pageSize).subscribe((response) => {
       this.users = response.content;
       this.totalPages = response.totalPages;
       this.totalElements = response.totalElements;
-      this.cdr.detectChanges();
+      //this.cdr.detectChanges();
+    });
+  }*/
+
+  loadUsers(): void {
+    console.log('LOAD USERS START');
+
+    this.userService.findAll(this.currentPage, this.pageSize).subscribe({
+      next: (response) => {
+        console.log('USERS RESPONSE', response);
+
+        this.users = [...response.content];
+
+        this.totalPages = response.totalPages;
+        this.totalElements = response.totalElements;
+
+        this.cdr.markForCheck();
+      },
+
+      error: (error) => {
+        console.log('USERS ERROR', error);
+      },
     });
   }
 
@@ -66,7 +93,7 @@ export class UserListComponent implements OnInit {
       if (result.isConfirmed) {
         this.userService.remove(userId).subscribe(() => {
           this.loadUsers();
-          this.cdr.detectChanges();
+          //this.cdr.detectChanges();
         });
       }
     });

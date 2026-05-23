@@ -14,10 +14,13 @@ function decode(token: string): any {
 export const authReducer = createReducer(
   initialAuthState,
 
+  // =========================
+  // LOGIN
+  // =========================
   on(AuthActions.login, (state) => ({
     ...state,
     loading: true,
-    error: null
+    error: null,
   })),
 
   on(AuthActions.loginSuccess, (state, { response }) => {
@@ -31,7 +34,8 @@ export const authReducer = createReducer(
       roles: decoded?.roles || [],
       isAuthenticated: true,
       loading: false,
-      error: null
+      error: null,
+      initialized: true,
     };
   }),
 
@@ -39,22 +43,34 @@ export const authReducer = createReducer(
     ...state,
     loading: false,
     error,
+    isAuthenticated: false,
+    initialized: true,
   })),
 
-  on(AuthActions.logout, () => initialAuthState),
+  // =========================
+  // LOGOUT
+  // =========================
+  on(AuthActions.logout, () => ({
+    ...initialAuthState,
+    initialized: true,
+  })),
 
-  on(AuthActions.refreshTokenSuccess, (state, { response }) => {
-    const decoded = decode(response.accessToken);
+  // =========================
+  // RESTORE SESSION
+  // =========================
+  on(AuthActions.restoreSessionSuccess, (state, { accessToken, refreshToken }) => {
+    const decoded = decode(accessToken);
 
     return {
       ...state,
-      accessToken: response.accessToken,
-      refreshToken: response.refreshToken,
+      accessToken,
+      refreshToken,
       username: decoded?.sub || null,
       roles: decoded?.roles || [],
-      isAuthenticated: true,
+      isAuthenticated: !!accessToken,
       loading: false,
-      error: null
+      error: null,
+      initialized: true,
     };
   }),
 );
