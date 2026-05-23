@@ -4,7 +4,7 @@ import Swal from 'sweetalert2';
 import { RouterModule } from '@angular/router';
 import { UserService } from '../../services/user-service';
 import { FormsModule } from '@angular/forms';
-import { Pagination } from "../pagination/pagination";
+import { Pagination } from '../pagination/pagination';
 import { AuthService } from '../../services/auth-service';
 
 @Component({
@@ -25,7 +25,7 @@ export class UserListComponent implements OnInit {
   constructor(
     private userService: UserService,
     private cdr: ChangeDetectorRef,
-    public authService: AuthService
+    public authService: AuthService,
   ) {}
 
   ngOnInit(): void {
@@ -37,7 +37,7 @@ export class UserListComponent implements OnInit {
       this.users = response.content;
       this.totalPages = response.totalPages;
       this.totalElements = response.totalElements;
-      this.cdr.detectChanges();
+      this.cdr.markForCheck();
     });
   }
 
@@ -66,7 +66,7 @@ export class UserListComponent implements OnInit {
       if (result.isConfirmed) {
         this.userService.remove(userId).subscribe(() => {
           this.loadUsers();
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
         });
       }
     });
