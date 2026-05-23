@@ -13,3 +13,9 @@ REDUCER
 STORE
    ↓ select
 UI reactiva
+
+
+
+
+
+Component → Actions → Effects → API → Reducer → Store → Selectors → Component
