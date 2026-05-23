@@ -38,15 +38,6 @@ export class UserListComponent implements OnInit {
     this.loadUsers();
   }
 
-  /*loadUsers(): void {
-    this.userService.findAll(this.currentPage, this.pageSize).subscribe((response) => {
-      this.users = response.content;
-      this.totalPages = response.totalPages;
-      this.totalElements = response.totalElements;
-      //this.cdr.detectChanges();
-    });
-  }*/
-
   loadUsers(): void {
     console.log('LOAD USERS START');
 

@@ -14,8 +14,13 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 
 /*
-    Customizing responses when the user is NOT authenticated.
-    For example: Missing token, Invalid token, Expired token and Malformed bearer
+    Handles unauthorized requests when authentication fails.
+
+    Examples:
+    - Missing token
+    - Invalid token
+    - Expired token
+    - Malformed Bearer token
  */
 @Component
 @RequiredArgsConstructor
@@ -28,9 +33,6 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
             HttpServletRequest request,
             HttpServletResponse response,
             AuthenticationException authException) throws IOException {
-
-        System.out.println("ENTRYPOINT TRIGGERED - 401 RESPONSE");
-
 
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);

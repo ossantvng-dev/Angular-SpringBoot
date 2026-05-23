@@ -34,8 +34,6 @@ public class JwtValidationFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
 
-        System.out.println("JWT FILTER HIT - URL: " + request.getRequestURI());
-
         final String authHeader = request.getHeader("Authorization");
 
         // 1. SIN TOKEN → dejar pasar (Spring decidirá si es público o no)
@@ -47,12 +45,8 @@ public class JwtValidationFilter extends OncePerRequestFilter {
         try {
             String token = authHeader.substring(7);
 
-            System.out.println("TOKEN RECEIVED: " + token);
-
             // 2. EXTRAER USERNAME (puede fallar si token es basura)
             String username = jwtService.extractUsername(token);
-
-            System.out.println("USERNAME FROM TOKEN: " + username);
 
             // 3. SOLO CONTINUAR SI NO HAY AUTH YA EN CONTEXTO
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -63,8 +57,6 @@ public class JwtValidationFilter extends OncePerRequestFilter {
                 boolean isValid = jwtService.isTokenValid(token, userDetails.getUsername());
 
                 if (!isValid) {
-
-                    System.out.println("INVALID TOKEN DETECTED");
 
                     SecurityContextHolder.clearContext();
 

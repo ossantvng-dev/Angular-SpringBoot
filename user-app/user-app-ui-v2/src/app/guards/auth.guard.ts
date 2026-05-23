@@ -7,11 +7,31 @@ export const authGuard: CanActivateFn = () => {
 
   const router = inject(Router);
 
-  if (authService.isAuthenticated()) {
-    return true;
+  const token = authService.getAccessToken();
+
+  // token inexistente
+  if (!token) {
+    router.navigate(['/login']);
+    return false;
   }
 
-  router.navigate(['/login']);
+  // token corrupto
+  try {
+    authService.getDecodedToken();
+  } catch {
+    authService.clearTokens();
 
-  return false;
+    router.navigate(['/login']);
+
+    return false;
+  }
+
+  /*
+    Token válido estructuralmente.
+    Aunque esté expirado, dejamos pasar.
+
+    El interceptor manejará refresh automático
+    cuando ocurra un request HTTP real.
+  */
+  return true;
 };
