@@ -1,11 +1,11 @@
 import { Routes } from '@angular/router';
-import { UserFormComponent } from './components/user-form-component/user-form-component';
-import { UserListComponent } from './components/user-list-component/user-list-component';
-import { LoginComponent } from './components/login-component/login-component';
+import { UserFormComponent } from './users/pages/user-form-component/user-form-component';
+import { UserListComponent } from './users/pages/user-list-component/user-list-component';
 import { authGuard } from './guards/auth.guard';
 import { roleGuard } from './guards/role.guard';
-import { Unauthorized } from './components/unauthorized/unauthorized';
-import { NotFoundComponent } from './components/not-found-component/not-found-component';
+import { LoginComponent } from './auth/login-component/login-component';
+import { Unauthorized } from './core/unauthorized/unauthorized';
+import { NotFoundComponent } from './core/not-found-component/not-found-component';
 
 export const routes: Routes = [
   {

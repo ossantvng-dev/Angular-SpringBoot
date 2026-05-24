@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { User } from '../models/user';
-import { map, Observable, of } from 'rxjs';
-import { USERS_MOCK_LIST } from '../utils/user.mock.data';
-import { getNextUserId } from '../utils/utils';
+import { Observable, of } from 'rxjs';
+import { USERS_MOCK_LIST } from '../../shared/utils/user.mock.data';
+import { getNextUserId } from '../../shared/utils/utils';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Pagination } from '../models/pagination';
+import { Pagination } from '../../shared/models/pagination';
 
 @Injectable({
   providedIn: 'root',

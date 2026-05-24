@@ -1,4 +1,5 @@
-import { User } from "../models/user";
+import { User } from "../../users/models/user";
+
 
 export function getNextUserId(users: User[]): number {
     if (!users || users.length === 0) {

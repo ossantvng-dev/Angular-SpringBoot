@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { User } from '../../models/user';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UserService } from '../../services/user-service';
 import Swal from 'sweetalert2';
+import { UserService } from '../../services/user-service';
 
 @Component({
   selector: 'user-form-component',

@@ -3,8 +3,8 @@ import { RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
-import * as AuthSelectors from '../../auth/auth.selectors';
-import * as AuthActions from '../../auth/auth.actions';
+import * as AuthSelectors from '../../auth/store/auth.selectors';
+import * as AuthActions from '../../auth/store/auth.actions';
 import { AsyncPipe } from '@angular/common';
 
 @Component({

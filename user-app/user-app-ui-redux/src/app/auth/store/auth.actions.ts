@@ -1,7 +1,6 @@
 import { createAction, props } from '@ngrx/store';
-import { LoginRequest } from '../models/auth/login-request';
-import { AuthResponse } from '../models/auth/auth-response';
-
+import { LoginRequest } from '../models/login-request';
+import { AuthResponse } from '../models/auth-response';
 
 export const login = createAction(
   '[Auth] Login',

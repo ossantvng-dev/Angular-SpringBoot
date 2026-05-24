@@ -1,8 +1,8 @@
 import { Component, signal } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
-import { Navbar } from './components/navbar/navbar';
 import { Store } from '@ngrx/store';
-import * as AuthActions from './auth/auth.actions';
+import * as AuthActions from './auth/store/auth.actions';
+import { Navbar } from './core/navbar/navbar';
 
 @Component({
   selector: 'app-root',

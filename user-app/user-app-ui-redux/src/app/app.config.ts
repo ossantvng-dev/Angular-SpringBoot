@@ -1,6 +1,5 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners, isDevMode } from '@angular/core';
 import { provideRouter } from '@angular/router';
-
 import { routes } from './app.routes';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { ErrorInterceptor } from './interceptors/error.interceptor';
@@ -8,8 +7,8 @@ import { JwtInterceptor } from './interceptors/jwt.interceptor';
 import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
-import { authReducer } from './auth/auth.reducer';
-import { AuthEffects } from './auth/auth.effects';
+import { authReducer } from './auth/store/auth.reducer';
+import { AuthEffects } from './auth/store/auth.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [

@@ -1,10 +1,10 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AuthResponse } from '../models/auth/auth-response';
-import { LoginRequest } from '../models/auth/login-request';
-import { RefreshTokenRequest } from '../models/auth/refresh-token-request';
 import { jwtDecode } from 'jwt-decode';
+import { AuthResponse } from '../models/auth-response';
+import { LoginRequest } from '../models/login-request';
+import { RefreshTokenRequest } from '../models/refresh-token-request';
 
 @Injectable({
   providedIn: 'root',

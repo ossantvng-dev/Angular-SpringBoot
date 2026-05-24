@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import * as AuthActions from '../../auth/auth.actions';
+import * as AuthActions from '../store/auth.actions';
 import { Store } from '@ngrx/store';
 
 @Component({

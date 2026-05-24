@@ -2,13 +2,13 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { User } from '../../models/user';
 import Swal from 'sweetalert2';
 import { RouterModule } from '@angular/router';
-import { UserService } from '../../services/user-service';
 import { FormsModule } from '@angular/forms';
-import { Pagination } from '../pagination/pagination';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
-import * as AuthSelectors from '../../auth/auth.selectors';
+import * as AuthSelectors from '../../../auth/store/auth.selectors';
 import { AsyncPipe } from '@angular/common';
+import { UserService } from '../../services/user-service';
+import { Pagination } from '../../../shared/pagination/pagination';
 
 @Component({
   selector: 'user-list-component',
