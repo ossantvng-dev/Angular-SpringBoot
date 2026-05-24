@@ -38,7 +38,7 @@ export class UserFormComponent {
   onSubmit(userForm: NgForm): void {
     if (userForm.valid) {
       if (this.user.id > 0) {
-        this.userService.update(this.user).subscribe(() => {
+        this.userService.update(this.user.id, this.user).subscribe(() => {
           Swal.fire({
             title: 'User updated',
             text: `User ${this.user.name} was successfully updated.`,

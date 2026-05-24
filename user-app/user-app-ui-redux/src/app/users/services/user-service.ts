@@ -1,16 +1,15 @@
 import { Injectable } from '@angular/core';
 import { User } from '../models/user';
-import { Observable, of } from 'rxjs';
-import { USERS_MOCK_LIST } from '../../shared/utils/user.mock.data';
-import { getNextUserId } from '../../shared/utils/utils';
+import { Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Pagination } from '../../shared/models/pagination';
+import { CreateUserRequest } from '../models/create-user-request';
+import { UpdateUserRequest } from '../models/update-user-request';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  private users: User[] = USERS_MOCK_LIST;
 
   private apiUrl = 'http://localhost:8080/api/users';
 
@@ -26,43 +25,20 @@ export class UserService {
     return this.http.get<Pagination<User>>(this.apiUrl, { params });   
   }
 
-  findAllV2(): Observable<User[]> {
-    return of([...this.users]);
-  }
-
   findById(userId: number): Observable<User> {
     return this.http.get<User>(`${this.apiUrl}/${userId}`);
   }
 
-  findByIdV2(userId: number): Observable<User | undefined> {
-    return of(this.users.find((u) => u.id === userId));
+  create(request: CreateUserRequest): Observable<User> {
+    return this.http.post<User>(this.apiUrl, request);
   }
 
-  create(user: User): Observable<User> {
-    return this.http.post<User>(this.apiUrl, user);
-  }
-
-  createV2(user: User): Observable<User> {
-    user.id = getNextUserId(this.users);
-    this.users.push(user);
-    return of(user);
-  }
-
-  update(user: User): Observable<User> {
-    return this.http.put<User>(`${this.apiUrl}/${user.id}`, user);
-  }
-
-  updateV2(user: User): Observable<User> {
-    this.users = this.users.map((u) => (u.id === user.id ? { ...user } : u));
-    return of(user);
+  update(userId: number, request: UpdateUserRequest): Observable<User> {
+    return this.http.put<User>(`${this.apiUrl}/${userId}`, request);
   }
 
   remove(userId: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${userId}`);
   }
 
-  removeV2(userId: number): Observable<void> {
-    this.users = this.users.filter(u => u.id !== userId);
-    return of(void 0);
-  }
 }
