@@ -4,6 +4,7 @@ import { catchError, map, of, switchMap, tap } from 'rxjs';
 import * as UsersActions from './users.actions';
 import { UserService } from '../services/user-service';
 import { AlertService } from '../../core/services/alert-service';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class UsersEffects {
@@ -12,6 +13,8 @@ export class UsersEffects {
   private userService = inject(UserService);
 
   private alert = inject(AlertService);
+
+  private router = inject(Router);
 
   // ======================================
   // LOAD USERS
@@ -76,6 +79,7 @@ export class UsersEffects {
 
         tap(() => {
           this.alert.success('User created successfully');
+          this.router.navigate(['/users']);
         }),
       ),
     { dispatch: false },
@@ -112,6 +116,7 @@ export class UsersEffects {
 
         tap(() => {
           this.alert.success('User updated successfully');
+          this.router.navigate(['/users']);
         }),
       ),
     { dispatch: false },

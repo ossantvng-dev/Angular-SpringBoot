@@ -3,7 +3,7 @@
   @if (isAdmin$ | async) {
     <button class="btn btn-primary my-3" [routerLink]="['/users/create']">Create User</button>
   }
-  @if (users.length == 0) {
+  @if ((users$ | async)?.length === 0) {
     <div class="alert alert-warning">There are no records in the system!</div>
   } @else {
     <table class="table table-hover table-striped">
@@ -21,7 +21,7 @@
         </tr>
       </thead>
       <tbody>
-        @for (user of users; track user.id) {
+        @for (user of (users$ | async); track user.id) {
           <tr>
             <td>{{ user.id }}</td>
             <td>{{ user.name }}</td>
@@ -51,9 +51,9 @@
 
     <app-pagination
       [currentPage]="currentPage"
-      [totalPages]="totalPages"
+      [totalPages]="(totalPages$ | async) || 0"
       [pageSize]="pageSize"
-      [totalElements]="totalElements"
+      [totalElements]="(totalElements$ | async) || 0"
       [pageSizes]="pageSizes"
       (pageChange)="goToPage($event)"
       (pageSizeChange)="changePageSize($event)"

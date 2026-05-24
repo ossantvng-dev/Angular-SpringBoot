@@ -13,9 +13,11 @@ export const roleGuard = (roles: string[]): CanActivateFn => {
     const authService = inject(AuthService);
 
     return store.select(AuthSelectors.selectAuthState).pipe(
-      // esperar restoreSession
+
+      // esperar restoreSession, solo deja pasar estados donde initialized sea true.
       filter((state) => state.initialized),
 
+      // toma el primer valor DESPUÉS del filter
       take(1),
 
       map((state) => {

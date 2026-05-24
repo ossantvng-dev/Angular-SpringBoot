@@ -1,34 +1,42 @@
 import { Component } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { Store } from '@ngrx/store';
+
 import { User } from '../../models/user';
-import { ActivatedRoute, Router } from '@angular/router';
-import Swal from 'sweetalert2';
 import { UserService } from '../../services/user-service';
+
+import * as UsersActions from '../../store/users.actions';
+import * as UsersSelectors from '../../store/users.selectors';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'user-form-component',
-  imports: [FormsModule],
+  imports: [FormsModule, AsyncPipe],
   templateUrl: './user-form-component.html',
   styleUrl: './user-form-component.css',
 })
 export class UserFormComponent {
   user: User;
 
+  loading$;
+
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     private userService: UserService,
+    private store: Store,
   ) {
+    this.loading$ = this.store.select(UsersSelectors.selectUsersLoading);
+
     // 1. Try getting the object from history.state
     this.user = history.state['user'] ?? new User();
 
     // 2. If object does not come in the state, use param id
     const id = this.route.snapshot.paramMap.get('id');
 
-    //console.log('user.id:', this.user.id, 'route id:', id);
-
     if (!this.user.id && id) {
       console.log('Loading user from service ...');
+
       this.userService.findById(+id).subscribe((u) => {
         this.user = u ?? new User();
       });
@@ -36,31 +44,33 @@ export class UserFormComponent {
   }
 
   onSubmit(userForm: NgForm): void {
-    if (userForm.valid) {
-      if (this.user.id > 0) {
-        this.userService.update(this.user.id, this.user).subscribe(() => {
-          Swal.fire({
-            title: 'User updated',
-            text: `User ${this.user.name} was successfully updated.`,
-            icon: 'success',
-            confirmButtonText: 'OK',
-          }).then(() => this.router.navigate(['/users']));
-        });
-      } else {
-        this.userService.create(this.user).subscribe(() => {
-          Swal.fire({
-            title: 'User created',
-            text: `User ${this.user.name} was successfully created.`,
-            icon: 'success',
-            confirmButtonText: 'OK',
-          }).then(() => this.router.navigate(['/users']));
-        });
-      }
+    if (!userForm.valid) {
+      return;
     }
+
+    // UPDATE
+    if (this.user.id) {
+      this.store.dispatch(
+        UsersActions.updateUser({
+          id: this.user.id,
+          request: this.user,
+        }),
+      );
+
+      return;
+    }
+
+    // CREATE
+    this.store.dispatch(
+      UsersActions.createUser({
+        request: this.user,
+      }),
+    );
   }
 
   onClear(userForm: NgForm): void {
     this.user = new User();
+
     userForm.resetForm();
   }
 }

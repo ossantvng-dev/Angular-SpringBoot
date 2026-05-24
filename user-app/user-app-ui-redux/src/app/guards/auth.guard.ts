@@ -13,29 +13,29 @@ export const authGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
 
   return store.select(AuthSelectors.selectAuthState).pipe(
-    tap((state) => {
+    /*tap((state) => {
       console.log('AUTH GUARD STATE:', state);
-    }),
+    }),*/
 
     filter((state) => state.initialized),
 
     take(1),
 
     map((state) => {
-      console.log('FINAL AUTH STATE:', state);
+      //console.log('FINAL AUTH STATE:', state);
 
       const token = state.accessToken;
 
       // token inválido o expirado
       if (!token || authService.isTokenExpired()) {
-        console.log('TOKEN EXPIRED OR INVALID');
+        //console.log('TOKEN EXPIRED OR INVALID');
 
         router.navigate(['/login']);
 
         return false;
       }
 
-      console.log('ALLOW ACCESS');
+      //console.log('ALLOW ACCESS');
 
       return true;
     }),
