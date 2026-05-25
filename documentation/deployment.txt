@@ -1,0 +1,163 @@
+Angular Frontend
+       ↓
+Spring Boot API (EC2)
+       ↓
+RDS MySQL
+
+Spring Boot API
+       ↓
+Redis (ElastiCache)
+
+
+Backend
+	
+	AWS EC2	(Spring Boot API + REDIS)
+	AWS RDS (MySQL)
+	
+Frontend
+	
+	AWS S3 + Cloud Front
+	
+	
+# Roadmap recomendado para aprender deployment y cloud
+
+## Fase 1 — Fundamentos manuales (actual)
+
+Objetivo:
+Entender cómo funciona realmente una aplicación en producción.
+
+### Backend
+
+* EC2 con Ubuntu
+* Instalar Java manualmente
+* Ejecutar Spring Boot JAR
+* Configurar variables de entorno
+* Configurar systemd para mantener el servicio vivo
+* Instalar Redis localmente en el EC2
+
+### Base de datos
+
+* RDS MySQL
+* Conexión remota desde Spring Boot
+* Security Groups
+* Networking básico AWS
+
+### Frontend
+
+* Angular build (`ng build`)
+* Hosting estático en S3
+  o
+* servir Angular desde Nginx
+
+### Infraestructura importante
+
+* Nginx reverse proxy
+* HTTPS
+* Let's Encrypt + Certbot
+* CORS
+* DNS básico
+
+### Objetivo de esta fase
+
+Aprender:
+
+* Linux
+* networking
+* reverse proxy
+* HTTPS
+* deployment manual
+* cloud fundamentals
+* arquitectura frontend/backend real
+
+---
+
+# Arquitectura recomendada para esta fase
+
+Browser
+↓ HTTPS
+Nginx
+├── Angular
+└── /api → Spring Boot
+
+Spring Boot
+├── Redis local
+└── RDS MySQL
+
+---
+
+## Fase 2 — Docker
+
+Objetivo:
+Empaquetar y reproducir ambientes fácilmente.
+
+### Aprender:
+
+* Dockerfile backend
+* Dockerfile Angular
+* docker-compose
+* networking entre containers
+* volúmenes
+* variables de entorno en containers
+
+### Resultado esperado
+
+Levantar toda la aplicación con:
+docker-compose up
+
+---
+
+## Fase 3 — Automatización simple
+
+Objetivo:
+Automatizar builds y deploys.
+
+### Aprender:
+
+* GitHub Actions
+* CI/CD básico
+* build automático
+* deploy automático a EC2
+
+Opcional:
+
+* Jenkins
+* Harness
+
+---
+
+## Fase 4 — Cloud más avanzada
+
+Solo después de dominar lo anterior.
+
+### Temas:
+
+* ECS / EKS
+* Kubernetes
+* Terraform
+* Helm
+* Secrets Manager
+* CloudFront
+* Load Balancers
+* observabilidad
+* auto scaling
+
+---
+
+# Recomendación importante
+
+NO saltar demasiado rápido a:
+
+* Kubernetes
+* Terraform
+* pipelines complejos
+
+Sin antes entender:
+
+* Linux
+* networking
+* HTTPS
+* Nginx
+* deployment manual
+* Docker básico
+
+Porque esas bases son las que realmente explican cómo funciona producción.
