@@ -1,0 +1,265 @@
+Spring Boot vs Micronaut Notes
+
+====================================================
+1. Filosofía del Framework
+====================================================
+
+Spring Boot
+- Runtime-heavy
+- Usa mucha reflection
+- Usa proxies dinámicos
+- Mucha magia en runtime
+- APIs muy maduras y “sugar-coated”
+
+Micronaut
+- Compile-time framework
+- Minimiza reflection
+- Genera metadata en compilación
+- Más AOT-friendly
+- Más explícito y minimalista
+
+Notas
+- En Micronaut es importante pensar:
+  “¿cómo se hace idiomáticamente aquí?”
+  y no simplemente “cómo traduzco Spring”.
+
+====================================================
+2. Build Tool
+====================================================
+
+Spring Boot
+- Maven comúnmente usado
+- XML build files
+
+Micronaut
+- Gradle muy común
+- Kotlin DSL frecuente
+- Build más moderno y rápido
+
+Notas
+- Aprender Gradle es importante para ecosistema Micronaut.
+- Gradle wrapper:
+  .\gradlew run
+
+====================================================
+3. Response Handling
+====================================================
+
+Spring Boot
+- ResponseEntity<T>
+
+Micronaut
+- HttpResponse<T>
+
+Ejemplo Spring
+ResponseEntity.ok(body)
+
+Ejemplo Micronaut
+HttpResponse.ok(body)
+
+Notas
+- unauthorized() NO acepta body
+- notFound() NO acepta body
+
+Debe hacerse:
+HttpResponse.status(HttpStatus.UNAUTHORIZED).body(error)
+
+====================================================
+4. Exception Handling
+====================================================
+
+Spring Boot
+- @RestControllerAdvice
+- @ExceptionHandler
+
+Micronaut
+- @Error(global = true)
+
+Notas
+- No existe un equivalente idéntico a @RestControllerAdvice
+- El enfoque idiomático es @Error
+
+====================================================
+5. Validation Exceptions
+====================================================
+
+Spring Boot
+- MethodArgumentNotValidException
+
+Micronaut
+- ConstraintViolationException
+
+Notas
+- Micronaut NO usa BindingResult
+- Se trabaja con:
+  ex.getConstraintViolations()
+
+====================================================
+6. Security Exceptions
+====================================================
+
+Spring Boot
+- BadCredentialsException
+
+Micronaut
+- AuthenticationException
+
+Notas
+- Spring Security y Micronaut Security son ecosistemas distintos
+- No asumir mismas excepciones
+
+====================================================
+7. Serialization
+====================================================
+
+Spring Boot
+- Jackson reflection-heavy por defecto
+
+Micronaut
+- Compile-time serialization
+
+Micronaut usa:
+@Serdeable
+
+Notas
+- Muy importante en DTOs y records
+- Reduce reflection
+- Más eficiente
+
+====================================================
+8. Immutable DTOs
+====================================================
+
+Spring Boot
+- POJOs tradicionales muy comunes
+
+Micronaut
+- records + @Serdeable encajan muy bien
+
+Ejemplo
+public record ApiError(...) {}
+
+Notas
+- Records son muy idiomáticos en Micronaut
+
+====================================================
+9. Transactions
+====================================================
+
+Spring Boot
+- @Transactional comúnmente en clases o métodos
+
+Micronaut
+- Igual se usa @Transactional
+
+Notas
+- También conviene usar:
+  @Transactional(readOnly = true)
+
+- El enfoque recomendado sigue siendo:
+  marcar métodos individualmente
+
+====================================================
+10. Dependency Injection
+====================================================
+
+Spring Boot
+- @Service
+- @Autowired
+
+Micronaut
+- @Singleton
+- Constructor Injection
+
+Notas
+- Constructor injection sigue siendo el enfoque ideal
+
+====================================================
+11. JPA Entity Scan
+====================================================
+
+Spring Boot
+- Escaneo automático muy agresivo
+
+Micronaut
+- Más explícito
+
+Requiere:
+jpa.default.entity-scan.packages=com.users.entity
+
+Notas
+- Micronaut necesita saber exactamente dónde están las entidades
+
+====================================================
+12. Flyway
+====================================================
+
+Spring Boot
+- Integración automática muy madura
+
+Micronaut
+- Funciona bien pero más explícito
+
+Notas
+- baseline-on-migrate=true útil al migrar proyectos existentes
+- Flyway valida naming convention estrictamente
+
+====================================================
+13. Lombok
+====================================================
+
+Spring Boot
+- Muy común
+
+Micronaut
+- Compatible
+- Funciona bien con MapStruct
+
+Dependencias necesarias:
+- lombok
+- lombok-mapstruct-binding
+
+====================================================
+14. MapStruct
+====================================================
+
+Spring Boot
+- Muy usado
+
+Micronaut
+- También recomendado
+
+Notas
+- Encaja muy bien con compile-time philosophy
+
+====================================================
+15. Mentalidad Correcta
+====================================================
+
+NO:
+“¿cómo traduzco Spring?”
+
+SÍ:
+“¿cómo resolvería esto Micronaut nativamente?”
+
+Porque si no:
+- terminas usando mentalidad Spring
+- pierdes ventajas de Micronaut
+- el código se siente forzado
+
+====================================================
+16. Sensación General Hasta Ahora
+====================================================
+
+Spring Boot
+- Más mágico
+- Más automático
+- Más abstracto
+- Más maduro
+
+Micronaut
+- Más explícito
+- Más liviano
+- Más predecible
+- Más compile-time oriented
+- Mejor para microservicios modernos y AOT
