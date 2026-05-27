@@ -1,20 +1,21 @@
 package com.users.exception.handler;
 
 import com.users.exception.ApiError;
+import com.users.exception.InvalidCredentialsException;
 import com.users.exception.InvalidRefreshTokenException;
 import com.users.exception.ResourceNotFoundException;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
+import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Error;
 import io.micronaut.security.authentication.AuthenticationException;
-import jakarta.inject.Singleton;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 
 import java.util.stream.Collectors;
 
-@Singleton
+@Controller
 public class GlobalExceptionHandler {
 
     @Error(global = true, exception = ResourceNotFoundException.class)
@@ -55,6 +56,14 @@ public class GlobalExceptionHandler {
         return HttpResponse.badRequest(error);
     }
 
+    @Error(global = true, exception = InvalidCredentialsException.class)
+    public HttpResponse<ApiError> handleInvalidCredentials(
+            HttpRequest<?> request,
+            InvalidCredentialsException ex) {
+        ApiError error = ApiError.of(HttpStatus.UNAUTHORIZED, ex.getMessage(), request.getPath());
+        return HttpResponse.status(HttpStatus.UNAUTHORIZED).body(error);
+    }
+
     @Error(global = true, exception = Exception.class)
     public HttpResponse<ApiError> handleGenericException(
             HttpRequest<?> request,
@@ -64,6 +73,12 @@ public class GlobalExceptionHandler {
     }
 
     private String formatViolation(ConstraintViolation<?> violation) {
-        return violation.getPropertyPath() + ": " + violation.getMessage();
+        String field = violation.getPropertyPath().toString();
+
+        if (field.contains(".")) {
+            field = field.substring(field.lastIndexOf('.') + 1);
+        }
+
+        return field + ": " + violation.getMessage();
     }
 }

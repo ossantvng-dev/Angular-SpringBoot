@@ -1,4 +1,4 @@
-package com.users.service;
+package com.users.service.impl;
 
 import com.users.dto.CreateUserRequestDTO;
 import com.users.dto.UpdateUserRequestDTO;
@@ -9,12 +9,13 @@ import com.users.exception.ResourceNotFoundException;
 import com.users.mapper.UserMapper;
 import com.users.repository.RoleRepository;
 import com.users.repository.UserRepository;
+import com.users.security.PasswordEncoderService;
+import com.users.service.UserService;
 import io.micronaut.data.model.Page;
 import io.micronaut.data.model.Pageable;
+import io.micronaut.transaction.annotation.Transactional;
 import jakarta.inject.Singleton;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.mindrot.jbcrypt.BCrypt;
 
 @Singleton
 @RequiredArgsConstructor
@@ -23,11 +24,12 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoderService passwordEncoderService;
 
     @Override
     @Transactional
     public UserResponseDTO create(CreateUserRequestDTO dto) {
-        dto.setPassword(BCrypt.hashpw(dto.getPassword(), BCrypt.gensalt()));
+        dto.setPassword(passwordEncoderService.encode(dto.getPassword()));
         User user = userMapper.toEntity(dto);
         Role defaultRole = roleRepository.findByName("ROLE_USER")
                 .orElseThrow(() -> new ResourceNotFoundException("Default role not found"));
@@ -45,19 +47,19 @@ public class UserServiceImpl implements UserService {
         existingUser.setEmail(dto.getEmail());
         existingUser.setUsername(dto.getUsername());
         if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
-            existingUser.setPassword(BCrypt.hashpw(dto.getPassword(), BCrypt.gensalt()));
+            existingUser.setPassword(passwordEncoderService.encode(dto.getPassword()));
         }
         return userMapper.toResponseDTO(userRepository.saveAndFlush(existingUser));
     }
 
     @Override
-    @Transactional(Transactional.TxType.SUPPORTS)
+    @Transactional(readOnly = true)
     public Page<UserResponseDTO> findAll(Pageable pageable) {
         return userRepository.findAll(pageable).map(userMapper::toResponseDTO);
     }
 
     @Override
-    @Transactional(Transactional.TxType.SUPPORTS)
+    @Transactional(readOnly = true)
     public UserResponseDTO findById(Long id) {
         return userRepository.findById(id)
                 .map(userMapper::toResponseDTO)

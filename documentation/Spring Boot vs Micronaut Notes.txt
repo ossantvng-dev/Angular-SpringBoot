@@ -78,6 +78,12 @@ Micronaut
 Notas
 - No existe un equivalente idéntico a @RestControllerAdvice
 - El enfoque idiomático es @Error
+- @Error handlers funcionan mejor dentro de un bean HTTP-aware
+- En la práctica suele usarse:
+  @Controller
+
+- @Singleton no siempre intercepta correctamente
+  ciertos errores HTTP framework-level
 
 ====================================================
 5. Validation Exceptions
@@ -125,6 +131,12 @@ Notas
 - Muy importante en DTOs y records
 - Reduce reflection
 - Más eficiente
+
+- Si falta @Serdeable:
+  "No serializable introspection present"
+
+- Spring serializa POJOs automáticamente vía reflection
+- Micronaut requiere metadata de serialización explícita
 
 ====================================================
 8. Immutable DTOs
@@ -189,9 +201,118 @@ jpa.default.entity-scan.packages=com.users.entity
 
 Notas
 - Micronaut necesita saber exactamente dónde están las entidades
+- Si no encuentra entidades:
+  "Entities not found for JPA configuration"
+
+- Micronaut es menos agresivo con scanning automático
 
 ====================================================
-12. Flyway
+12. Controllers
+====================================================
+
+Spring Boot
+- @RestController
+- @RequestMapping
+
+Micronaut
+- @Controller("/path")
+
+Notas
+- Micronaut serializa JSON automáticamente
+- @RestController realmente no existe como concepto separado
+
+Ejemplo Spring
+@RestController
+@RequestMapping("/users")
+
+Ejemplo Micronaut
+@Controller("/users")
+
+====================================================
+13. Pagination
+====================================================
+
+Spring Boot
+- org.springframework.data.domain.Page
+- Pageable
+
+Micronaut
+- io.micronaut.data.model.Page
+- Pageable
+
+Notas
+- La serialización JSON es distinta
+
+- Micronaut devuelve:
+  content
+  pageable
+  totalSize
+
+- Spring devuelve:
+  totalElements
+  totalPages
+  etc.
+
+====================================================
+14. Security Activation
+====================================================
+
+Spring Boot
+- Security normalmente requiere configuración explícita
+
+Micronaut
+- Security puede activarse automáticamente
+  por classpath/properties
+
+Ejemplo
+micronaut.security.authentication=bearer
+
+Notas
+- Agregar micronaut-security-jwt puede activar
+  filtros de autenticación automáticamente
+
+- Para desactivar temporalmente:
+  micronaut.security.enabled=false
+
+====================================================
+15. Validation Error Format
+====================================================
+
+Spring Boot
+- Errores suelen venir más simplificados
+
+Micronaut
+- Validation paths son más explícitos
+
+Ejemplo Micronaut
+create.dto.username
+
+Notas
+- Puede requerir limpieza manual para APIs frontend-friendly
+
+====================================================
+16. Reflection vs Compile-Time Philosophy
+====================================================
+
+Spring Boot
+- Reflection-first
+
+Micronaut
+- Compile-time-first
+
+Impacto práctico
+- Serialization
+- Dependency Injection
+- Validation metadata
+- Bean introspection
+- Native image compatibility
+
+Notas
+- Muchas cosas que Spring descubre en runtime,
+  Micronaut las genera en compilación
+
+====================================================
+17. Flyway
 ====================================================
 
 Spring Boot
@@ -205,7 +326,7 @@ Notas
 - Flyway valida naming convention estrictamente
 
 ====================================================
-13. Lombok
+18. Lombok
 ====================================================
 
 Spring Boot
@@ -215,12 +336,12 @@ Micronaut
 - Compatible
 - Funciona bien con MapStruct
 
-Dependencias necesarias:
+Dependencias necesarias
 - lombok
 - lombok-mapstruct-binding
 
 ====================================================
-14. MapStruct
+19. MapStruct
 ====================================================
 
 Spring Boot
@@ -232,8 +353,14 @@ Micronaut
 Notas
 - Encaja muy bien con compile-time philosophy
 
+Spring
+@Mapper(componentModel = "spring")
+
+Micronaut
+@Mapper(componentModel = "jsr330")
+
 ====================================================
-15. Mentalidad Correcta
+20. Mentalidad Correcta
 ====================================================
 
 NO:
@@ -248,7 +375,7 @@ Porque si no:
 - el código se siente forzado
 
 ====================================================
-16. Sensación General Hasta Ahora
+21. Sensación General Hasta Ahora
 ====================================================
 
 Spring Boot
