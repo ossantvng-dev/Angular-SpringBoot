@@ -1,0 +1,32 @@
+sudo dnf update -y
+
+sudo dnf install -y nmap-ncat
+
+sudo dnf list available | grep corretto
+
+sudo dnf install java-25-amazon-corretto-devel -y
+
+sudo dnf search redis
+
+sudo dnf install redis6 -y
+
+sudo systemctl start redis6
+
+sudo systemctl status redis6
+
+ssh -i "C:\Users\ossan\OneDrive\Documents\MyDocs\AWS\ssh-keys\ec2-user-app-api.pem" ec2-user@ec2-3-19-27-201.us-east-2.compute.amazonaws.com
+
+nano env.sh
+
+	export DB_URL="jdbc:mysql://mysql-aws-v8.c3880icu4a9n.us-east-2.rds.amazonaws.com:3306/usersdb?allowPublicKeyRetrieval=true&useSSL=false"
+	export DB_USERNAME="root"
+	export DB_PASSWORD="masterAWSdbpwd!!!"
+
+	export REDIS_HOST="localhost"
+	export REDIS_PORT="6379"
+
+CTRL + X → Y → ENTER
+
+source env.sh
+
+nc -zv mysql-aws-v8.c3880icu4a9n.us-east-2.rds.amazonaws.com 3306

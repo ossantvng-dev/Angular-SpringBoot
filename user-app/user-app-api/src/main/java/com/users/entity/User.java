@@ -1,6 +1,10 @@
 package com.users.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,18 +26,25 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     @Column(name = "name")
     private String name;
 
+    @NotBlank
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "email")
+    @NotEmpty
+    @Email
+    @Column(name = "email", unique = true)
     private String email;
 
-    @Column(name = "username")
+    @NotBlank
+    @Size(min = 4, max = 50)
+    @Column(name = "username", unique = true)
     private String username;
 
+    @NotBlank
     @Column(name = "password")
     private String password;
 
