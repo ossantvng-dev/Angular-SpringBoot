@@ -11,10 +11,11 @@ import * as UsersActions from '../../store/users.actions';
 import * as UsersSelectors from '../../store/users.selectors';
 import * as AuthSelectors from '../../../auth/store/auth.selectors';
 import { AsyncPipe } from '@angular/common';
+import { Spinner } from '../../../shared/spinner/spinner';
 
 @Component({
   selector: 'user-list-component',
-  imports: [RouterModule, FormsModule, Pagination, AsyncPipe],
+  imports: [RouterModule, FormsModule, Pagination, AsyncPipe, Spinner],
   templateUrl: './user-list-component.html',
   styleUrl: './user-list-component.css',
 })

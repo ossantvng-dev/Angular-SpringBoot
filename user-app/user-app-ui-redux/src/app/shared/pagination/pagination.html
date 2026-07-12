@@ -40,3 +40,9 @@
     </li>
   </ul>
 </nav>
+
+@if (loading$ | async) {
+  <div class="d-flex justify-content-center my-3">
+    <app-spinner></app-spinner>
+  </div>
+}

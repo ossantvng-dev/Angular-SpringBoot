@@ -118,7 +118,7 @@
               [disabled]="userForm.invalid || (loading$ | async)"
             >
               @if (loading$ | async) {
-                Saving...
+                <app-spinner></app-spinner> Saving...
               } @else {
                 {{ user.id ? 'Update' : 'Create' }}
               }

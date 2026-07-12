@@ -26,7 +26,13 @@
         </ul>
         <div class="d-flex align-items-center gap-3 ms-auto">
           <span class="navbar-text"> Welcome {{ username$ | async }} </span>
-          <button class="btn btn-outline-danger" (click)="logout()">Logout</button>
+          <button class="btn btn-outline-danger" (click)="logout()" [disabled]="loading$ | async">
+            @if (loading$ | async) {
+              <app-spinner></app-spinner> Logging out...
+            } @else {
+              Logout
+            }
+          </button>
         </div>
       </div>
     </div>

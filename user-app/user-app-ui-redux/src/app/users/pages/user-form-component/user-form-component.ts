@@ -9,10 +9,11 @@ import { UserService } from '../../services/user-service';
 import * as UsersActions from '../../store/users.actions';
 import * as UsersSelectors from '../../store/users.selectors';
 import { AsyncPipe } from '@angular/common';
+import { Spinner } from '../../../shared/spinner/spinner';
 
 @Component({
   selector: 'user-form-component',
-  imports: [FormsModule, AsyncPipe],
+  imports: [FormsModule, AsyncPipe, Spinner],
   templateUrl: './user-form-component.html',
   styleUrl: './user-form-component.css',
 })

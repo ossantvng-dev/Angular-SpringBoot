@@ -1,9 +1,14 @@
+import { AsyncPipe } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Spinner } from '../spinner/spinner';
+import { Observable } from 'rxjs';
+import * as UsersSelectors from '../../users/store/users.selectors';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-pagination',
-  imports: [FormsModule],
+  imports: [FormsModule, AsyncPipe, Spinner],
   templateUrl: './pagination.html',
   styleUrl: './pagination.css',
 })
@@ -16,6 +21,12 @@ export class Pagination {
 
   @Output() pageChange = new EventEmitter<number>();
   @Output() pageSizeChange = new EventEmitter<number>();
+
+  loading$: Observable<boolean>;
+
+  constructor(private store: Store) {
+    this.loading$ = this.store.select(UsersSelectors.selectUsersLoading);
+  }
 
   goToPage(page: number): void {
     if (page >= 0 && page < this.totalPages) {

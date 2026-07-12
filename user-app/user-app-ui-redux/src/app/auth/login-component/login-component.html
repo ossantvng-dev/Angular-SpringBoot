@@ -1,37 +1,26 @@
 <div class="container mt-5">
   <div class="card p-4 shadow">
-
     <h3 class="text-center mb-4">User Login</h3>
 
     <form (ngSubmit)="onSubmit()">
-
       <div class="mb-3">
         <label>Username</label>
 
-        <input
-          type="text"
-          class="form-control"
-          [(ngModel)]="username"
-          name="username"
-        />
+        <input type="text" class="form-control" [(ngModel)]="username" name="username" />
       </div>
 
       <div class="mb-3">
         <label>Password</label>
 
-        <input
-          type="password"
-          class="form-control"
-          [(ngModel)]="password"
-          name="password"
-        />
+        <input type="password" class="form-control" [(ngModel)]="password" name="password" />
       </div>
 
-      <button class="btn btn-primary w-100">
-        Login
-      </button>
+      <button class="btn btn-primary w-100">Login</button>
 
+      <!-- Spinner Bootstrap reusable -->
+      @if (loading$ | async) {
+        <app-spinner></app-spinner>
+      }
     </form>
-
   </div>
 </div>

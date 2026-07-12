@@ -6,11 +6,12 @@ import { Observable } from 'rxjs';
 import * as AuthSelectors from '../../auth/store/auth.selectors';
 import * as AuthActions from '../../auth/store/auth.actions';
 import { AsyncPipe } from '@angular/common';
+import { Spinner } from "../../shared/spinner/spinner";
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterModule, AsyncPipe],
+  imports: [RouterModule, AsyncPipe, Spinner],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
 })
@@ -19,6 +20,7 @@ export class Navbar {
   isAuthenticated$: Observable<boolean>;
   username$: Observable<string | null>;
   isAdmin$: Observable<boolean>;
+  loading$: Observable<boolean>;
 
   constructor(private store: Store) {
 
@@ -30,6 +32,9 @@ export class Navbar {
 
     this.isAdmin$ =
       this.store.select(AuthSelectors.selectIsAdmin);
+
+    this.loading$ = 
+      this.store.select(AuthSelectors.selectAuthLoading);
   }
 
   logout(): void {

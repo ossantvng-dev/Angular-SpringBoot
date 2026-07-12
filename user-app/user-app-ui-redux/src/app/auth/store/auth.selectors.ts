@@ -32,3 +32,8 @@ export const selectIsAdmin = createSelector(
   selectRoles, 
   (roles) => roles.includes('ROLE_ADMIN')
 );
+
+export const selectAuthLoading = createSelector(
+  selectAuthState,
+  (state: AuthState) => state.loading
+);
