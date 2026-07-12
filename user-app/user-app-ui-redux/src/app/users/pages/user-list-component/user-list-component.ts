@@ -3,7 +3,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import Swal from 'sweetalert2/dist/sweetalert2.all.js';
+import Swal from 'sweetalert2';
 import { Pagination } from '../../../shared/pagination/pagination';
 import { AuthService } from '../../../auth/services/auth-service';
 import { User } from '../../models/user';
