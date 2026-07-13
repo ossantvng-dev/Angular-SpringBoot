@@ -33,4 +33,6 @@ nc -zv mysql-aws-v8.c3880icu4a9n.us-east-2.rds.amazonaws.com 3306
 
 nohup java -jar user-app-api-0.0.1-SNAPSHOT.jar > app.log 2>&1 &
 
+screen -d -m java -jar user-app-api-0.0.1-SNAPSHOT.jar
+
 tail -f app.log

@@ -1,0 +1,24 @@
+Deploy angular app in S3
+	
+	ng build --configuration production
+	
+	The previous command will generate a dist folder. Inside of it, you have the app name and the browser folder. Those are the files we need.
+	
+
+S3
+	
+	Create the bucket in aws
+
+	Unblock the public access
+
+	Upload the files from the browser folder
+	
+	Go to properties tab and enable Static website hosting
+	
+	Go to Permissions and edit the bucket policy 
+	
+	Copy the Bucket website endpoint
+	
+	
+	
+	http://angular-users-app-ui-redux.s3-website.us-east-2.amazonaws.com
