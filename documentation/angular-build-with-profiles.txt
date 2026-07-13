@@ -1,0 +1,10 @@
+Build con perfiles
+	
+	Dev
+		
+		ng serve
+
+	Prod
+		
+		ng build --configuration production
+
