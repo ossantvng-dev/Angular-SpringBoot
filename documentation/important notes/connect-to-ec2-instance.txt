@@ -1,0 +1,5 @@
+ssh -i "C:\Users\ossan\OneDrive\Documents\MyDocs\AWS\ssh-keys\ec2-user-app-api.pem" ec2-user@ec2-3-19-27-201.us-east-2.compute.amazonaws.com
+
+ssh -i "C:\Users\ossan\OneDrive\Documents\MyDocs\AWS\ssh-keys\ec2-user-app-api.pem" ec2-user@ec2-18-221-204-128.us-east-2.compute.amazonaws.com
+
+ssh -i "C:\Users\ossan\OneDrive\Documents\MyDocs\AWS\ssh-keys\ec2-user-app-api.pem" ec2-user@ec2-18-224-72-170.us-east-2.compute.amazonaws.com
