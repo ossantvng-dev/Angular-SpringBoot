@@ -1,6 +1,7 @@
 package com.users.service.impl;
 
 import com.users.dto.CreateUserRequestDTO;
+import com.users.dto.PagedResponseDTO;
 import com.users.dto.UpdateUserRequestDTO;
 import com.users.dto.UserResponseDTO;
 import com.users.entity.Role;
@@ -11,7 +12,6 @@ import com.users.repository.RoleRepository;
 import com.users.repository.UserRepository;
 import com.users.security.PasswordEncoderService;
 import com.users.service.UserService;
-import io.micronaut.data.model.Page;
 import io.micronaut.data.model.Pageable;
 import io.micronaut.transaction.annotation.Transactional;
 import jakarta.inject.Singleton;
@@ -54,8 +54,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<UserResponseDTO> findAll(Pageable pageable) {
-        return userRepository.findAll(pageable).map(userMapper::toResponseDTO);
+    public PagedResponseDTO<UserResponseDTO> findAll(Pageable pageable) {
+        return PagedResponseDTO.from(userRepository.findAll(pageable), userMapper::toResponseDTO);
     }
 
     @Override

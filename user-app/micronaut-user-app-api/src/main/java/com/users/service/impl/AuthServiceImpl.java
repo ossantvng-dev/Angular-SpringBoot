@@ -2,13 +2,13 @@ package com.users.service.impl;
 
 import com.users.dto.AuthResponseDTO;
 import com.users.dto.LoginRequestDTO;
-import com.users.entity.User;
-import com.users.exception.InvalidCredentialsException;
-import com.users.repository.UserRepository;
+import com.users.dto.RefreshTokenRequestDTO;
 import com.users.security.JwtTokenService;
-import com.users.security.PasswordEncoderService;
+import com.users.security.RefreshTokenService;
+import com.users.security.UserCredentialsAuthenticator;
 import com.users.service.AuthService;
-import io.micronaut.transaction.annotation.Transactional;
+import io.micronaut.core.annotation.Nullable;
+import io.micronaut.security.authentication.Authentication;
 import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 
@@ -16,23 +16,50 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-    private final UserRepository userRepository;
-    private final PasswordEncoderService passwordEncoderService;
+    private final UserCredentialsAuthenticator credentialsAuthenticator;
     private final JwtTokenService jwtTokenService;
+    private final RefreshTokenService refreshTokenService;
 
     @Override
-    @Transactional(readOnly = true)
     public AuthResponseDTO login(LoginRequestDTO request) {
-        User user = userRepository.findByUsername(request.getUsername())
-                .orElseThrow(() -> new InvalidCredentialsException("Invalid username or password"));
 
-        boolean matches = passwordEncoderService
-                .matches(request.getPassword(), user.getPassword());
+        // Throws InvalidCredentialsException on failure, which GlobalExceptionHandler
+        // renders as 401 + ApiError - the same shape Spring produced for BadCredentialsException.
+        Authentication authentication = credentialsAuthenticator.authenticate(
+                request.getUsername(),
+                request.getPassword()
+        );
 
-        if (!matches) {
-            throw new InvalidCredentialsException("Invalid username or password");
+        String accessToken = jwtTokenService.generateAccessToken(authentication);
+        String refreshToken = refreshTokenService.create(authentication.getName());
+
+        return new AuthResponseDTO(accessToken, refreshToken);
+    }
+
+    @Override
+    public AuthResponseDTO refresh(RefreshTokenRequestDTO request) {
+
+        String username = refreshTokenService.validate(request.getRefreshToken());
+
+        Authentication authentication = credentialsAuthenticator.authenticationFor(username);
+
+        String newAccessToken = jwtTokenService.generateAccessToken(authentication);
+        String newRefreshToken = refreshTokenService.create(username);
+
+        // Same sequence as the Spring version. create() has already dropped the previous
+        // token via the RT_USER: index, so this is belt-and-braces rather than essential.
+        refreshTokenService.revoke(request.getRefreshToken());
+
+        return new AuthResponseDTO(newAccessToken, newRefreshToken);
+    }
+
+    @Override
+    public void logout(@Nullable Authentication authentication) {
+
+        // Null when the caller sends no token, or one that is expired or invalid.
+        // Nothing to revoke in that case - logout stays idempotent and returns 204.
+        if (authentication != null) {
+            refreshTokenService.revokeByUsername(authentication.getName());
         }
-
-        return new AuthResponseDTO(jwtTokenService.generateAccessToken(user.getUsername()), "TEMP_REFRESH_TOKEN");
     }
 }

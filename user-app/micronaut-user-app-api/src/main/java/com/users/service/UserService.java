@@ -1,9 +1,9 @@
 package com.users.service;
 
 import com.users.dto.CreateUserRequestDTO;
+import com.users.dto.PagedResponseDTO;
 import com.users.dto.UpdateUserRequestDTO;
 import com.users.dto.UserResponseDTO;
-import io.micronaut.data.model.Page;
 import io.micronaut.data.model.Pageable;
 
 public interface UserService {
@@ -12,7 +12,7 @@ public interface UserService {
 
     UserResponseDTO update(Long id, UpdateUserRequestDTO dto);
 
-    Page<UserResponseDTO> findAll(Pageable pageable);
+    PagedResponseDTO<UserResponseDTO> findAll(Pageable pageable);
 
     UserResponseDTO findById(Long id);
 
