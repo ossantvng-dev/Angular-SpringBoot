@@ -5,7 +5,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Pagination } from '../../shared/models/pagination';
 import { CreateUserRequest } from '../models/create-user-request';
 import { UpdateUserRequest } from '../models/update-user-request';
-import { environment } from '../../../environments/environment.prod';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',

@@ -28,3 +28,20 @@ Install dev tools
 Install effects
 	
 	ng add @ngrx/effects@latest
+	
+	
+Run local build
+		
+	npm run build
+	
+Run production build
+	
+	npx ng build --configuration production
+
+To run the app and point to local backend either spring boot or micronaut use
+	
+	ng serve
+	
+To run the app and point to remote backend in AWS
+
+	 npx ng serve -c production
